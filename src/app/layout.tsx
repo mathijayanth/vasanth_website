@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
 import { SiteFooter, SiteHeader } from "@/components/layout";
+import { siteConfig } from "@/config/site";
 import "./globals.css";
 
 const sans = Plus_Jakarta_Sans({
@@ -17,14 +18,11 @@ const serif = Source_Serif_4({
 
 export const metadata: Metadata = {
   title: {
-    default: "VitalNotes | Your Health, Better Understood",
-    template: "%s | VitalNotes",
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "Evidence-based health information written and reviewed by healthcare professionals.",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-  ),
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.url),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

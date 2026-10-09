@@ -73,7 +73,7 @@ export async function requestPasswordReset(
     throw new AppError("EMAIL_FAILED", "Unable to send reset email. Try again later.");
   }
 
-  return !delivered && env.nodeEnv !== "production" ? { devResetUrl: resetUrl } : {};
+  return !delivered && !env.isProduction ? { devResetUrl: resetUrl } : {};
 }
 
 export async function resetPassword(input: ResetPasswordInput): Promise<void> {

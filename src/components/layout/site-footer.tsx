@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { footerNav, socialLinks } from "@/features/home/data/homepage-data";
+import { footerNav, socialLinks } from "@/config/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();

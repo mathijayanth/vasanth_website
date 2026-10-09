@@ -1,4 +1,5 @@
 import "server-only";
+import { env } from "@/config/env";
 
 export type SendMailInput = {
   to: string;
@@ -15,8 +16,7 @@ export type SendMailResult =
  * Sends transactional mail when configured (Resend). Otherwise logs in non-production.
  */
 export async function sendMail(input: SendMailInput): Promise<SendMailResult> {
-  const from = process.env.EMAIL_FROM;
-  const resendKey = process.env.RESEND_API_KEY;
+  const { from, resendApiKey: resendKey } = env.email;
 
   if (resendKey && from) {
     const response = await fetch("https://api.resend.com/emails", {
@@ -43,7 +43,7 @@ export async function sendMail(input: SendMailInput): Promise<SendMailResult> {
     return { delivered: true, provider: "resend" };
   }
 
-  if (process.env.NODE_ENV !== "production") {
+  if (!env.isProduction) {
     console.info("[dev] Email not configured — message preview:");
     console.info(`  To: ${input.to}`);
     console.info(`  Subject: ${input.subject}`);

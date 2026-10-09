@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LogoutButton, canAccessAdminPath } from "@/features/auth";
+import { LogoutButton, canAccessAdmin, canAccessAdminPath } from "@/features/auth";
 import { getSessionUser } from "@/features/auth/server/session";
 
 const navItems = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/articles", label: "Articles" },
-  { href: "/admin/categories", label: "Categories", roles: ["ADMIN", "EDITOR"] as const },
-  { href: "/admin/authors", label: "Authors", roles: ["ADMIN", "EDITOR"] as const },
+  { href: "/admin/categories", label: "Categories" },
+  { href: "/admin/authors", label: "Authors" },
 ];
 
 export const metadata: Metadata = {
@@ -24,6 +24,9 @@ export default async function AdminLayout({
   if (!user) {
     redirect("/login?next=/admin");
   }
+  if (!canAccessAdmin(user.role)) {
+    redirect("/");
+  }
 
   return (
     <div className="flex flex-1 flex-col border-t border-border bg-background">
@@ -37,12 +40,7 @@ export default async function AdminLayout({
           </div>
           <nav aria-label="Admin" className="flex flex-wrap gap-2">
             {navItems.map((item) => {
-              if (item.roles && !item.roles.includes(user.role as "ADMIN" | "EDITOR")) {
-                return null;
-              }
-              if (!canAccessAdminPath(item.href, user.role) && item.href !== "/admin") {
-                return null;
-              }
+              if (!canAccessAdminPath(item.href, user.role)) return null;
               return (
                 <Link
                   key={item.href}

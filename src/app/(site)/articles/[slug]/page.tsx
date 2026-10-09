@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { env } from "@/config/env";
+import { siteConfig } from "@/config/site";
 import {
   ArticleBreadcrumb,
   ArticleContent,
@@ -43,7 +43,7 @@ export async function generateMetadata({
     return { title: "Article not found" };
   }
 
-  const canonical = `${env.appUrl}/articles/${article.slug}`;
+  const canonical = `${siteConfig.url}/articles/${article.slug}`;
 
   return {
     title: article.title,
@@ -83,7 +83,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
 
   const headings = extractHeadings(article.content);
   const related = await getRelatedArticles(article);
-  const canonicalUrl = `${env.appUrl}/articles/${article.slug}`;
+  const canonicalUrl = `${siteConfig.url}/articles/${article.slug}`;
   const jsonLd = buildArticleJsonLd(article, canonicalUrl);
 
   return (

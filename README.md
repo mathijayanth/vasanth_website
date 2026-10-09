@@ -28,7 +28,9 @@ Modern healthcare editorial platform built with **Next.js (App Router)**, **Type
    | Variable | Purpose |
    | -------- | ------- |
    | `DATABASE_URL` | PostgreSQL for Prisma and Server Components |
-   | `AUTH_SECRET` | Session JWT signing (min 16 characters) |
+   | `AUTH_SECRET` | Session JWT signing — `openssl rand -base64 48` (min 16 chars in dev, 32 in production) |
+
+   Variables are validated when the server starts (`src/config/env.ts`); the app refuses to boot with a clear message if one is missing. CI builds without secrets can set `SKIP_ENV_VALIDATION=1`.
    | `NEXT_PUBLIC_APP_URL` | Canonical URLs, password reset links |
 
 3. **Database (local)**
@@ -94,23 +96,31 @@ Sessions use an HTTP-only cookie (`vitalnotes_session`) backed by a signed JWT. 
 ## Project structure
 
 ```text
-app/                    # App Router routes
-  articles/             # Listing + [slug] detail (DB-backed)
-  authors/              # Listing + [slug] detail
-  login/ register/      # Auth pages
-  admin/                # Dashboard (protected)
-  api/                  # Route handlers + auth
-components/
-  ui/                   # Design system
-  auth/                 # Login/register forms
-lib/
-  auth/                 # Session, permissions, password reset
-  articles/             # Query helpers + DB mappers
-  api/                  # API responses and services
-prisma/                 # Schema, migrations, seed
+src/
+  app/                    # Routing only
+    (site)/               # Public pages: home, articles, authors, topics, legal
+    (auth)/               # login, register, forgot/reset password
+    (admin)/admin/        # Admin dashboard (protected)
+    api/                  # Thin route handlers
+  features/               # One folder per business area
+    articles/             # components/, server/ (service, repository, policy), lib/, schemas, types
+    auth/                 # session, permissions, password reset, forms
+    authors/ categories/ newsletter/ home/
+  components/
+    ui/                   # Design system — import from @/components/ui
+    layout/               # Header, footer, section header
+  server/                 # Shared backend: db client, HTTP helpers, email
+  config/                 # env.ts (validated secrets), site.ts (brand, nav)
+  lib/                    # Pure helpers
+  types/                  # Cross-feature types
+  proxy.ts                # Auth gate for /admin and write APIs
+  instrumentation.ts      # Validates env on server start
+prisma/                   # Schema, migrations, seed
+scripts/                  # Verification scripts
+docs/                     # Playbooks and design docs
 ```
 
-Agent skills live in `.cursor/skills/` and `.agent/skills/` — see `AGENTS.md`.
+Backend requests flow **route handler → service → repository → Prisma**. Architecture rules are in [`AGENTS.md`](AGENTS.md); agent skills live in `.cursor/skills/` and `.agent/skills/`.
 
 ## Verify setup
 

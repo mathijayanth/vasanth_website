@@ -1,5 +1,5 @@
 import type { ArticleDetail } from "../article.types";
-import { env } from "@/config/env";
+import { siteConfig } from "@/config/site";
 
 export function buildArticleJsonLd(article: ArticleDetail, canonicalUrl: string) {
   return {
@@ -19,12 +19,12 @@ export function buildArticleJsonLd(article: ArticleDetail, canonicalUrl: string)
     author: {
       "@type": "Person",
       name: article.author.name,
-      url: `${env.appUrl}/authors/${article.author.slug}`,
+      url: `${siteConfig.url}/authors/${article.author.slug}`,
     },
     publisher: {
       "@type": "Organization",
       name: "VitalNotes",
-      url: env.appUrl,
+      url: siteConfig.url,
     },
     mainEntityOfPage: canonicalUrl,
     about: {
