@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { TopicGrid } from "@/components/articles";
-import { SectionHeader } from "@/components/home";
-import { topics } from "@/lib/mock/homepage-data";
+import { SectionHeader } from "@/components/layout";
+import { TopicGrid } from "@/features/categories";
+import { topics } from "@/features/home";
 
 export const metadata: Metadata = {
   title: "Topics",

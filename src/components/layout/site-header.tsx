@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { focusRing, touchTarget } from "@/components/ui/primitives";
-import { primaryNavLinks } from "@/lib/mock/homepage-data";
+import { primaryNavLinks } from "@/features/home/data/homepage-data";
 import { cn } from "@/lib/utils";
 
 function SearchIcon() {

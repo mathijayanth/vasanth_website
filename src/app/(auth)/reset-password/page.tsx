@@ -1,4 +1,4 @@
-import { AuthForm } from "@/components/auth/auth-form";
+import { AuthForm } from "@/features/auth";
 
 type ResetPasswordPageProps = {
   searchParams: Promise<{ token?: string }>;

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Card, CardDescription, CardTitle } from "@/components/ui";
-import { canManageAuthors } from "@/lib/auth/permissions";
-import { getSessionUser } from "@/lib/auth/session";
+import { canManageAuthors } from "@/features/auth/permissions";
+import { getSessionUser } from "@/features/auth/server/session";
 
 export default async function AdminAuthorsPage() {
   const user = await getSessionUser();

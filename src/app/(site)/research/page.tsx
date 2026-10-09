@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { ArticleGrid } from "@/components/articles";
-import { SectionHeader } from "@/components/home";
-import { latestArticles } from "@/lib/mock/homepage-data";
+import { SectionHeader } from "@/components/layout";
+import { ArticleGrid } from "@/features/articles";
+import { latestArticles } from "@/features/home";
 
 export const metadata: Metadata = {
   title: "Research",

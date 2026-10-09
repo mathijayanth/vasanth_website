@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { footerNav, socialLinks } from "@/lib/mock/homepage-data";
+import { footerNav, socialLinks } from "@/features/home/data/homepage-data";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();

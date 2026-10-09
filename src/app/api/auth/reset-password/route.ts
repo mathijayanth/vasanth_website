@@ -1,39 +1,13 @@
-import { NextResponse } from "next/server";
-import { hash } from "bcryptjs";
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { parseJsonBody } from "@/lib/api/parse";
-import { getClientIp, rateLimitOrError } from "@/lib/api/rate-limit";
-import { handleRouteError } from "@/lib/api/handle-error";
-import {
-  consumePasswordResetToken,
-  markPasswordResetTokenUsed,
-} from "@/lib/auth/password-reset";
-import { db } from "@/lib/db";
-import { resetPasswordSchema } from "@/lib/validations/auth";
+import { resetPasswordSchema } from "@/features/auth/auth.schemas";
+import { resetPassword } from "@/features/auth/server/auth.service";
+import { withErrorHandling } from "@/server/http/handle-error";
+import { parseJsonBody } from "@/server/http/parse";
+import { enforceRateLimit } from "@/server/http/rate-limit";
+import { apiSuccess } from "@/server/http/response";
 
-export async function POST(request: Request) {
-  try {
-    const ip = getClientIp(request);
-    const limited = await rateLimitOrError("auth-reset-password", ip, 10, 60_000);
-    if (limited) return limited;
-
-    const parsed = await parseJsonBody(resetPasswordSchema, request);
-    if (parsed instanceof NextResponse) return parsed;
-
-    const record = await consumePasswordResetToken(parsed.token);
-    if (!record) {
-      return apiError("BAD_REQUEST", "Invalid or expired reset token", 400);
-    }
-
-    const passwordHash = await hash(parsed.password, 12);
-    await db.user.update({
-      where: { id: record.userId },
-      data: { passwordHash },
-    });
-    await markPasswordResetTokenUsed(record.id);
-
-    return apiSuccess({ reset: true }, { message: "Password updated successfully" });
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
+export const POST = withErrorHandling(async (request) => {
+  enforceRateLimit(request, { bucket: "auth-reset-password", limit: 10, windowMs: 60_000 });
+  const input = await parseJsonBody(resetPasswordSchema, request);
+  await resetPassword(input);
+  return apiSuccess({ reset: true }, { message: "Password updated successfully" });
+});

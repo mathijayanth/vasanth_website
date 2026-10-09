@@ -1,17 +1,16 @@
+import { SectionHeader } from "@/components/layout";
+import { ArticleGrid, FeaturedArticle } from "@/features/articles";
+import { ExpertGrid } from "@/features/authors";
+import { TopicGrid } from "@/features/categories";
 import {
-  ArticleGrid,
-  ExpertGrid,
-  FeaturedArticle,
-  TopicGrid,
-} from "@/components/articles";
-import { HeroSection, NewsletterSection, SectionHeader } from "@/components/home";
-import {
+  HeroSection,
   experts,
   featuredArticle,
   latestArticles,
   topics,
   trendingArticles,
-} from "@/lib/mock/homepage-data";
+} from "@/features/home";
+import { NewsletterSection } from "@/features/newsletter";
 
 export default function HomePage() {
   return (

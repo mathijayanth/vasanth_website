@@ -1,4 +1,4 @@
-import { ArticlesPageSkeleton } from "@/components/articles/article-card-skeleton";
+import { ArticlesPageSkeleton } from "@/features/articles";
 
 export default function ArticlesLoading() {
   return <ArticlesPageSkeleton />;

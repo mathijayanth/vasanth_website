@@ -1,23 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { apiSuccess } from "@/lib/api/response";
-import { parseSearchParams } from "@/lib/api/parse";
-import { handleRouteError } from "@/lib/api/handle-error";
-import { searchArticles } from "@/lib/api/services/articles";
-import { searchQuerySchema } from "@/lib/validations/api";
+import { searchQuerySchema } from "@/features/articles/article.schemas";
+import { searchArticles } from "@/features/articles/server/article.service";
+import { withErrorHandling } from "@/server/http/handle-error";
+import { parseSearchParams } from "@/server/http/parse";
+import { apiSuccess } from "@/server/http/response";
 
-export async function GET(request: NextRequest) {
-  try {
-    const parsed = parseSearchParams(searchQuerySchema, request.nextUrl.searchParams);
-    if (parsed instanceof NextResponse) return parsed;
-
-    const result = await searchArticles({
-      pagination: { page: parsed.page, limit: parsed.limit },
-      q: parsed.q,
-      categorySlug: parsed.category,
-    });
-
-    return apiSuccess(result);
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
+export const GET = withErrorHandling(async (request) => {
+  const query = parseSearchParams(searchQuerySchema, request.nextUrl.searchParams);
+  return apiSuccess(await searchArticles(query));
+});

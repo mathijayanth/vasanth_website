@@ -1,7 +1,7 @@
 /**
  * Smoke-test Prisma queries against the seeded database.
  */
-import { db } from "@/lib/db";
+import { db } from "@/server/db/client";
 
 async function main() {
   const [categoryCount, authorCount, articleCount, tagCount] = await Promise.all([

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Card, CardDescription, CardTitle } from "@/components/ui";
-import { getSessionUser } from "@/lib/auth/session";
+import { getSessionUser } from "@/features/auth/server/session";
 
 export const metadata: Metadata = {
   title: "Admin",

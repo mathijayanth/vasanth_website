@@ -1,33 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import { apiSuccess } from "@/lib/api/response";
-import { parseJsonBody } from "@/lib/api/parse";
-import { getClientIp, rateLimitOrError } from "@/lib/api/rate-limit";
-import { handleRouteError } from "@/lib/api/handle-error";
-import { db } from "@/lib/db";
-import { newsletterSchema } from "@/lib/validations/api";
+import { newsletterSchema } from "@/features/newsletter/newsletter.schemas";
+import { subscribe } from "@/features/newsletter/server/newsletter.service";
+import { withErrorHandling } from "@/server/http/handle-error";
+import { parseJsonBody } from "@/server/http/parse";
+import { enforceRateLimit } from "@/server/http/rate-limit";
+import { apiSuccess } from "@/server/http/response";
 
-export async function POST(request: NextRequest) {
-  try {
-    const ip = getClientIp(request);
-    const limited = await rateLimitOrError("newsletter-subscribe", ip, 5, 60_000);
-    if (limited) return limited;
-
-    const parsed = await parseJsonBody(newsletterSchema, request);
-    if (parsed instanceof NextResponse) return parsed;
-
-    const email = parsed.email.toLowerCase();
-
-    await db.newsletterSubscriber.upsert({
-      where: { email },
-      create: { email, status: "ACTIVE" },
-      update: { status: "ACTIVE", unsubscribedAt: null },
-    });
-
-    return apiSuccess(
-      { subscribed: true },
-      { message: "Subscribed successfully", status: 201 },
-    );
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
+export const POST = withErrorHandling(async (request) => {
+  enforceRateLimit(request, { bucket: "newsletter-subscribe", limit: 5, windowMs: 60_000 });
+  const input = await parseJsonBody(newsletterSchema, request);
+  await subscribe(input);
+  return apiSuccess({ subscribed: true }, { message: "Subscribed successfully", status: 201 });
+});

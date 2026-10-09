@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Card, CardDescription, CardTitle } from "@/components/ui";
-import { canManageCategories } from "@/lib/auth/permissions";
-import { getSessionUser } from "@/lib/auth/session";
+import { canManageCategories } from "@/features/auth/permissions";
+import { getSessionUser } from "@/features/auth/server/session";
 
 export default async function AdminCategoriesPage() {
   const user = await getSessionUser();

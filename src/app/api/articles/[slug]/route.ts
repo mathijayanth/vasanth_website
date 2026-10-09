@@ -1,128 +1,42 @@
-import { NextRequest, NextResponse } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { parseJsonBody } from "@/lib/api/parse";
-import { handleRouteError } from "@/lib/api/handle-error";
-import { looksLikeCuid } from "@/lib/api/utils";
-import { getSessionUser, requireRoles } from "@/lib/auth/session";
+import { updateArticleSchema } from "@/features/articles/article.schemas";
 import {
-  getAuthorProfileIdForUser,
-  userCanEditArticle,
-  validateArticleMutationPermissions,
-} from "@/lib/auth/article-access";
-import { canManageArticles } from "@/lib/auth/permissions";
-import {
-  deleteArticleRecord,
-  findArticleBySlugOrId,
-  ensureAuthorExists,
-  ensureCategoryExists,
-  ensureUniqueArticleSlug,
-  serializeArticle,
-  updateArticleRecord,
-} from "@/lib/api/services/articles";
-import { updateArticleSchema } from "@/lib/validations/api";
+  deleteArticle,
+  getArticle,
+  updateArticle,
+} from "@/features/articles/server/article.service";
+import { getSessionUser, requireUser } from "@/features/auth/server/session";
+import { looksLikeCuid } from "@/lib/ids";
+import { badRequest } from "@/server/http/errors";
+import { withErrorHandling } from "@/server/http/handle-error";
+import { parseJsonBody } from "@/server/http/parse";
+import { apiSuccess } from "@/server/http/response";
 
 type RouteContext = { params: Promise<{ slug: string }> };
 
-export async function GET(_request: NextRequest, context: RouteContext) {
-  try {
-    const { slug } = await context.params;
-    const session = await getSessionUser();
-    const includeDrafts =
-      session?.role === "ADMIN" ||
-      session?.role === "EDITOR" ||
-      session?.role === "AUTHOR";
-
-    const article = await findArticleBySlugOrId(slug, { includeDrafts });
-    if (!article) {
-      return apiError("NOT_FOUND", "Article not found", 404);
-    }
-
-    return apiSuccess(serializeArticle(article));
-  } catch (error) {
-    return handleRouteError(error);
-  }
+/** GET accepts a slug or id; mutations require the article id in this segment. */
+async function requireArticleId(context: RouteContext): Promise<string> {
+  const { slug: id } = await context.params;
+  if (!looksLikeCuid(id)) throw badRequest("Article id is required for this operation");
+  return id;
 }
 
-export async function PUT(request: NextRequest, context: RouteContext) {
-  try {
-    const { slug: id } = await context.params;
-    if (!looksLikeCuid(id)) {
-      return apiError("BAD_REQUEST", "Article id must be used for updates", 400);
-    }
+export const GET = withErrorHandling<RouteContext>(async (_request, context) => {
+  const { slug } = await context.params;
+  const viewer = await getSessionUser();
+  return apiSuccess(await getArticle(slug, viewer?.role));
+});
 
-    const auth = await requireRoles(["ADMIN", "EDITOR", "AUTHOR"]);
-    if (auth.error) return auth.error;
-    if (!canManageArticles(auth.user.role)) {
-      return apiError("FORBIDDEN", "You do not have permission to update articles", 403);
-    }
+export const PUT = withErrorHandling<RouteContext>(async (request, context) => {
+  const id = await requireArticleId(context);
+  const user = await requireUser();
+  const input = await parseJsonBody(updateArticleSchema, request);
+  const article = await updateArticle(id, input, user);
+  return apiSuccess(article, { message: "Article updated" });
+});
 
-    const parsed = await parseJsonBody(updateArticleSchema, request);
-    if (parsed instanceof NextResponse) return parsed;
-
-    if (parsed.slug) {
-      const unique = await ensureUniqueArticleSlug(parsed.slug, id);
-      if (!unique) return apiError("CONFLICT", "Article slug already exists", 409);
-    }
-
-    if (parsed.categoryId) {
-      const category = await ensureCategoryExists(parsed.categoryId);
-      if (!category) return apiError("BAD_REQUEST", "Invalid categoryId", 400);
-    }
-
-    if (parsed.authorId) {
-      const author = await ensureAuthorExists(parsed.authorId);
-      if (!author) return apiError("BAD_REQUEST", "Invalid authorId", 400);
-    }
-
-    const canEdit = await userCanEditArticle(auth.user.id, auth.user.role, id);
-    if (!canEdit) {
-      return apiError("FORBIDDEN", "You can only edit your own articles", 403);
-    }
-
-    const authorProfile =
-      auth.user.role === "AUTHOR"
-        ? await getAuthorProfileIdForUser(auth.user.id)
-        : null;
-    const permission = validateArticleMutationPermissions(
-      auth.user.role,
-      { status: parsed.status, authorId: parsed.authorId },
-      { ownAuthorId: authorProfile?.id ?? null },
-    );
-    if (!permission.ok) {
-      return apiError("FORBIDDEN", permission.message, 403);
-    }
-
-    const updatePayload = {
-      ...parsed,
-      publishedAt:
-        parsed.publishedAt === undefined
-          ? undefined
-          : parsed.publishedAt
-            ? new Date(parsed.publishedAt)
-            : null,
-    };
-
-    const article = await updateArticleRecord(id, updatePayload);
-
-    return apiSuccess(serializeArticle(article), { message: "Article updated" });
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
-
-export async function DELETE(_request: NextRequest, context: RouteContext) {
-  try {
-    const { slug: id } = await context.params;
-    if (!looksLikeCuid(id)) {
-      return apiError("BAD_REQUEST", "Article id must be used for deletion", 400);
-    }
-
-    const auth = await requireRoles(["ADMIN", "EDITOR"]);
-    if (auth.error) return auth.error;
-
-    await deleteArticleRecord(id);
-    return apiSuccess({ id }, { message: "Article deleted" });
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
+export const DELETE = withErrorHandling<RouteContext>(async (_request, context) => {
+  const id = await requireArticleId(context);
+  const user = await requireUser();
+  await deleteArticle(id, user);
+  return apiSuccess({ id }, { message: "Article deleted" });
+});

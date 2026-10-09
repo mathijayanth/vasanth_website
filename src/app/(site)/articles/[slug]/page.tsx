@@ -1,33 +1,36 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
+import { env } from "@/config/env";
 import {
   ArticleBreadcrumb,
   ArticleContent,
   ArticleHeader,
   ArticleHeroImage,
   ArticleMedicalDisclaimer,
-  ArticleReferencesSection,
   ArticlePlaceholderBanner,
+  ArticleReferencesSection,
   KeyTakeawayBox,
   MedicalReviewSection,
   RelatedArticlesSection,
   TableOfContents,
-} from "@/components/articles";
-import { buildArticleJsonLd } from "@/lib/articles/article-json-ld";
+  buildArticleJsonLd,
+  extractHeadings,
+} from "@/features/articles";
 import {
-  getAllArticleSlugs,
-  getArticleBySlug,
-  getFallbackRelatedArticles,
-} from "@/lib/articles/get-article-by-slug";
-import { env } from "@/lib/env";
-import { extractHeadings } from "@/types/article-content";
+  getPublishedArticle,
+  getPublishedArticleSlugs,
+  getRelatedArticles,
+} from "@/features/articles/server/article.service";
+
+const getArticle = cache(getPublishedArticle);
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export async function generateStaticParams() {
-  const slugs = await getAllArticleSlugs();
+  const slugs = await getPublishedArticleSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
@@ -35,7 +38,7 @@ export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getArticleBySlug(slug);
+  const article = await getArticle(slug);
   if (!article) {
     return { title: "Article not found" };
   }
@@ -72,14 +75,14 @@ export async function generateMetadata({
 
 export default async function ArticleDetailPage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = await getArticleBySlug(slug);
+  const article = await getArticle(slug);
 
   if (!article) {
     notFound();
   }
 
   const headings = extractHeadings(article.content);
-  const related = await getFallbackRelatedArticles(article);
+  const related = await getRelatedArticles(article);
   const canonicalUrl = `${env.appUrl}/articles/${article.slug}`;
   const jsonLd = buildArticleJsonLd(article, canonicalUrl);
 

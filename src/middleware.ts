@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { canAccessAdminPath } from "@/lib/auth/permissions";
-import { getSessionFromRequest } from "@/lib/auth/session-edge";
+import { canAccessAdminPath } from "@/features/auth/permissions";
+import { getSessionFromRequest } from "@/features/auth/session-edge";
 
 const PUBLIC_AUTH_API = new Set([
   "/api/auth/login",

@@ -8,15 +8,16 @@ import {
   ArticlesFeaturedSection,
   ArticlesResultsSummary,
   FeaturedArticle,
-} from "@/components/articles";
-import { Pagination } from "@/components/ui";
-import { buildArticlesPaginationLinks } from "@/lib/articles/pagination";
-import { loadArticleCategories } from "@/lib/articles/load-categories";
-import { countPublishedArticles, queryArticles } from "@/lib/articles/query-articles";
-import {
+  buildArticlesPaginationLinks,
   parseArticlesQuery,
   type ArticlesSearchParams,
-} from "@/lib/articles/search-params";
+} from "@/features/articles";
+import {
+  countPublishedArticles,
+  getArticlesPage,
+} from "@/features/articles/server/article.service";
+import { getCategoryOptions } from "@/features/categories/server/category.service";
+import { Pagination } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Health Articles",
@@ -32,8 +33,8 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
   const rawParams = await searchParams;
   const query = parseArticlesQuery(rawParams);
   const [result, articleCategories, publishedCount] = await Promise.all([
-    queryArticles(query),
-    loadArticleCategories(),
+    getArticlesPage(query),
+    getCategoryOptions(),
     countPublishedArticles(),
   ]);
   const categoryLabel = articleCategories.find(

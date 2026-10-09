@@ -1,60 +1,28 @@
-import { NextRequest } from "next/server";
-import { apiError, apiSuccess } from "@/lib/api/response";
-import { handleRouteError } from "@/lib/api/handle-error";
-import { looksLikeCuid } from "@/lib/api/utils";
-import { requireAuth } from "@/lib/auth/session";
-import { db } from "@/lib/db";
+import { saveArticle, unsaveArticle } from "@/features/articles/server/article.service";
+import { requireUser } from "@/features/auth/server/session";
+import { looksLikeCuid } from "@/lib/ids";
+import { badRequest } from "@/server/http/errors";
+import { withErrorHandling } from "@/server/http/handle-error";
+import { apiSuccess } from "@/server/http/response";
 
 type RouteContext = { params: Promise<{ slug: string }> };
 
-async function getPublishedArticleId(id: string) {
-  return db.article.findFirst({
-    where: { id, status: "PUBLISHED" },
-    select: { id: true },
-  });
+async function requireArticleId(context: RouteContext): Promise<string> {
+  const { slug: id } = await context.params;
+  if (!looksLikeCuid(id)) throw badRequest("Invalid article id");
+  return id;
 }
 
-export async function POST(_request: NextRequest, context: RouteContext) {
-  try {
-    const { slug: id } = await context.params;
-    if (!looksLikeCuid(id)) {
-      return apiError("BAD_REQUEST", "Invalid article id", 400);
-    }
+export const POST = withErrorHandling<RouteContext>(async (_request, context) => {
+  const articleId = await requireArticleId(context);
+  const user = await requireUser();
+  await saveArticle(articleId, user);
+  return apiSuccess({ articleId, saved: true }, { message: "Article saved", status: 201 });
+});
 
-    const auth = await requireAuth();
-    if (auth.error) return auth.error;
-
-    const article = await getPublishedArticleId(id);
-    if (!article) return apiError("NOT_FOUND", "Article not found", 404);
-
-    await db.savedArticle.upsert({
-      where: { userId_articleId: { userId: auth.user.id, articleId: id } },
-      create: { userId: auth.user.id, articleId: id },
-      update: {},
-    });
-
-    return apiSuccess({ articleId: id, saved: true }, { message: "Article saved", status: 201 });
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
-
-export async function DELETE(_request: NextRequest, context: RouteContext) {
-  try {
-    const { slug: id } = await context.params;
-    if (!looksLikeCuid(id)) {
-      return apiError("BAD_REQUEST", "Invalid article id", 400);
-    }
-
-    const auth = await requireAuth();
-    if (auth.error) return auth.error;
-
-    await db.savedArticle.deleteMany({
-      where: { userId: auth.user.id, articleId: id },
-    });
-
-    return apiSuccess({ articleId: id, saved: false }, { message: "Article unsaved" });
-  } catch (error) {
-    return handleRouteError(error);
-  }
-}
+export const DELETE = withErrorHandling<RouteContext>(async (_request, context) => {
+  const articleId = await requireArticleId(context);
+  const user = await requireUser();
+  await unsaveArticle(articleId, user);
+  return apiSuccess({ articleId, saved: false }, { message: "Article unsaved" });
+});

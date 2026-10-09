@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArticleGrid } from "@/components/articles";
-import { SectionHeader } from "@/components/home";
-import { latestArticles, topics } from "@/lib/mock/homepage-data";
+import { SectionHeader } from "@/components/layout";
+import { ArticleGrid } from "@/features/articles";
+import { latestArticles, topics } from "@/features/home";
 
 type TopicPageProps = {
   params: Promise<{ slug: string }>;

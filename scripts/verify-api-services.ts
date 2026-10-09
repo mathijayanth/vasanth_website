@@ -1,36 +1,27 @@
 /**
- * Smoke-test API service queries (database-backed).
+ * Smoke-test the service layer against the seeded database.
  */
-import { listArticles, findArticleBySlugOrId, searchArticles } from "@/lib/api/services/articles";
-import { db } from "@/lib/db";
+import {
+  getArticle,
+  listArticles,
+  searchArticles,
+} from "@/features/articles/server/article.service";
+import { listCategories } from "@/features/categories/server/category.service";
+import { db } from "@/server/db/client";
 
 async function main() {
-  const list = await listArticles({
-    pagination: { page: 1, limit: 6 },
-    includeDrafts: false,
-    sort: "latest",
-  });
-
-  const article = await findArticleBySlugOrId("calmer-way-to-read-clinical-evidence", {
-    includeDrafts: false,
-  });
-
-  const search = await searchArticles({
-    pagination: { page: 1, limit: 5 },
-    q: "placeholder",
-  });
-
-  const categories = await db.category.count();
+  const list = await listArticles({ page: 1, limit: 6, sort: "latest" });
+  const article = await getArticle("calmer-way-to-read-clinical-evidence");
+  const search = await searchArticles({ page: 1, limit: 5, q: "placeholder" });
+  const categories = await listCategories({ page: 1, limit: 50 });
 
   console.log("API service verification OK", {
     listCount: list.items.length,
     listTotal: list.pagination.total,
-    articleSlug: article?.slug ?? null,
+    articleSlug: article.slug,
     searchTotal: search.pagination.total,
-    categories,
+    categories: categories.pagination.total,
   });
-
-  if (!article) throw new Error("Expected seeded article via API services");
 }
 
 main()

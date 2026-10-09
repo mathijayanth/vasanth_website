@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LogoutButton } from "@/components/auth/logout-button";
-import { canAccessAdminPath } from "@/lib/auth/permissions";
-import { getSessionUser } from "@/lib/auth/session";
+import { LogoutButton, canAccessAdminPath } from "@/features/auth";
+import { getSessionUser } from "@/features/auth/server/session";
 
 const navItems = [
   { href: "/admin", label: "Dashboard" },
