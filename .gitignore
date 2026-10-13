@@ -39,6 +39,7 @@ backups/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.preview
 !.env.example
 
 # vercel

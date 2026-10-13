@@ -15,7 +15,8 @@
     "db:seed": "prisma db seed",
     "db:verify": "tsx --conditions=react-server scripts/verify-database.ts",
     "api:verify": "tsx --conditions=react-server scripts/verify-api-services.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma migrate deploy && next build"
   },
   "dependencies": {
     "@prisma/client": "^6.16.0",

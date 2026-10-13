@@ -8,6 +8,8 @@ export const siteConfig = {
     "Scientifically accurate, reader-friendly, and purpose-driven medical and healthcare content backed by reliable medical literature and authoritative sources.",
   tagline: "Evidence-Based Medical Content & Healthcare Communication",
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  /** Set NEXT_PUBLIC_SITE_NOINDEX=1 on preview deployments to keep them out of search engines. */
+  noindex: process.env.NEXT_PUBLIC_SITE_NOINDEX === "1",
 } as const;
 
 /** `/services` also opens a submenu of every service in the header. */
