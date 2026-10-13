@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Search",
-  description: "Search medical articles and topics on VitalNotes.",
+  description: "Search medical articles and topics on VMed Research.",
 };
 
 export default function SearchPage() {

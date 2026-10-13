@@ -182,6 +182,11 @@ export async function getArticlesPage(query: ParsedArticlesQuery): Promise<Artic
   };
 }
 
+export async function getLatestArticles(limit = 3): Promise<ArticleSummary[]> {
+  const rows = await articleRepository.findMany({ filters: { status: "PUBLISHED" }, take: limit });
+  return rows.map(toArticleSummary);
+}
+
 export function countPublishedArticles(): Promise<number> {
   return articleRepository.count({ status: "PUBLISHED" });
 }

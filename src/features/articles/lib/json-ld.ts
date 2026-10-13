@@ -23,7 +23,7 @@ export function buildArticleJsonLd(article: ArticleDetail, canonicalUrl: string)
     },
     publisher: {
       "@type": "Organization",
-      name: "VitalNotes",
+      name: "VMed Research",
       url: siteConfig.url,
     },
     mainEntityOfPage: canonicalUrl,

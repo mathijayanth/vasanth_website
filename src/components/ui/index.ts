@@ -1,3 +1,4 @@
+export { Accordion, type AccordionItem } from "./accordion";
 export { Avatar } from "./avatar";
 export { Badge } from "./badge";
 export { Button, ButtonLink, buttonSizes, buttonVariants } from "./button";
@@ -23,6 +24,7 @@ export {
   touchTarget,
   transitionBase,
 } from "./primitives";
+export { Reveal } from "./reveal";
 export { Select } from "./select";
 export { Skeleton } from "./skeleton";
 export { Spinner } from "./spinner";

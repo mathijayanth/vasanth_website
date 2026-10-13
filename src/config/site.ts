@@ -2,45 +2,35 @@ import type { NavLink } from "@/types";
 
 /** Public, client-safe site configuration. Secrets belong in `./env`. */
 export const siteConfig = {
-  name: "VitalNotes",
-  title: "VitalNotes | Your Health, Better Understood",
+  name: "VMed Research",
+  title: "VMed Research | Medical & Healthcare Content That Communicates Clearly",
   description:
-    "Evidence-based health information written and reviewed by healthcare professionals.",
+    "Scientifically accurate, reader-friendly, and purpose-driven medical and healthcare content backed by reliable medical literature and authoritative sources.",
+  tagline: "Evidence-Based Medical Content & Healthcare Communication",
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
 } as const;
 
+/** `/services` also opens a submenu of every service in the header. */
 export const primaryNavLinks: NavLink[] = [
-  { href: "/articles", label: "Articles" },
-  { href: "/topics", label: "Topics" },
-  { href: "/authors", label: "Experts" },
-  { href: "/research", label: "Research" },
+  { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/services", label: "Services" },
+  { href: "/resources", label: "Resources" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export const footerNav = {
-  about: [
+  quickLinks: [
+    { href: "/", label: "Home" },
     { href: "/about", label: "About" },
+    { href: "/services", label: "Services" },
+    { href: "/resources", label: "Resources / Blog" },
     { href: "/contact", label: "Contact" },
-  ],
-  topics: [
-    { href: "/topics/heart-health", label: "Heart Health" },
-    { href: "/topics/diabetes", label: "Diabetes" },
-    { href: "/topics/nutrition", label: "Nutrition" },
-    { href: "/topics/mental-health", label: "Mental Health" },
-  ],
-  articles: [
-    { href: "/articles", label: "All articles" },
-    { href: "/research", label: "Research" },
   ],
   legal: [
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/terms", label: "Terms" },
     { href: "/disclaimer", label: "Medical Disclaimer" },
+    { href: "/login", label: "Team login" },
   ],
 } as const;
-
-export const socialLinks = [
-  { href: "https://linkedin.com", label: "LinkedIn" },
-  { href: "https://x.com", label: "X (Twitter)" },
-  { href: "https://instagram.com", label: "Instagram" },
-] as const;

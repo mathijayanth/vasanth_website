@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 type SectionHeaderProps = {
@@ -7,6 +8,7 @@ type SectionHeaderProps = {
   description?: string;
   href?: string;
   linkLabel?: string;
+  align?: "start" | "center";
   className?: string;
 };
 
@@ -16,30 +18,41 @@ export function SectionHeader({
   description,
   href,
   linkLabel = "View all",
+  align = "start",
   className,
 }: SectionHeaderProps) {
+  const centered = align === "center";
+
   return (
-    <div
+    <Reveal
       className={cn(
-        "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
+        "flex flex-col gap-4",
+        centered ? "items-center text-center" : "sm:flex-row sm:items-end sm:justify-between",
         className,
       )}
     >
-      <div className="max-w-2xl">
-        {overline ? <p className="text-overline">{overline}</p> : null}
-        <h2 className={cn("text-title", overline && "mt-2")}>{title}</h2>
-        {description ? (
-          <p className="mt-2 text-subtitle">{description}</p>
+      <div className={cn("max-w-2xl", centered && "mx-auto")}>
+        {overline ? (
+          <p className={cn("inline-flex items-center gap-2 text-overline", centered && "justify-center")}>
+            <span aria-hidden className="h-px w-6 bg-gradient-to-r from-transparent to-secondary" />
+            {overline}
+            {centered ? (
+              <span aria-hidden className="h-px w-6 bg-gradient-to-l from-transparent to-secondary" />
+            ) : null}
+          </p>
         ) : null}
+        <h2 className={cn("text-title", overline && "mt-3")}>{title}</h2>
+        {description ? <p className="mt-3 text-subtitle">{description}</p> : null}
       </div>
       {href ? (
         <Link
           href={href}
-          className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold text-primary hover:underline"
+          className="group inline-flex min-h-11 shrink-0 items-center gap-1.5 text-sm font-semibold text-primary"
         >
-          {linkLabel} →
+          {linkLabel}
+          <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>
         </Link>
       ) : null}
-    </div>
+    </Reveal>
   );
 }

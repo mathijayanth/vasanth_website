@@ -12,6 +12,7 @@ const envSchema = z.object({
     : z.string().min(16, "AUTH_SECRET must be at least 16 characters").optional(),
   EMAIL_FROM: z.string().min(3).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
+  CONTACT_INBOX_EMAIL: z.string().email().optional(),
   UPSTASH_REDIS_REST_URL: z.string().url().startsWith("https://").optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
 });
@@ -60,6 +61,7 @@ export const env = {
     from: raw.EMAIL_FROM,
     resendApiKey: raw.RESEND_API_KEY,
   },
+  contactInboxEmail: raw.CONTACT_INBOX_EMAIL,
   upstash:
     raw.UPSTASH_REDIS_REST_URL && raw.UPSTASH_REDIS_REST_TOKEN
       ? { url: raw.UPSTASH_REDIS_REST_URL, token: raw.UPSTASH_REDIS_REST_TOKEN }

@@ -29,7 +29,7 @@ export function ArticleBreadcrumb({
         <li aria-hidden>/</li>
         <li>
           <Link
-            href={`/topics/${categorySlug}`}
+            href={`/articles?category=${categorySlug}`}
             className="hover:text-foreground"
           >
             {category}

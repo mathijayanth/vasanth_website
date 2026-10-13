@@ -93,7 +93,7 @@ export function ArticleMedicalDisclaimer() {
         treatment. Always seek the advice of your physician or another qualified
         health provider with any questions regarding a medical condition. Never
         disregard professional advice or delay seeking it because of something
-        you have read on VitalNotes. If you think you may have a medical
+        you have read on VMed Research. If you think you may have a medical
         emergency, call your local emergency services immediately.
       </p>
       <p className="mt-3 text-sm text-muted">

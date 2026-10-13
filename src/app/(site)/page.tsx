@@ -1,90 +1,116 @@
-import { SectionHeader } from "@/components/layout";
-import { ArticleGrid, FeaturedArticle } from "@/features/articles";
-import { ExpertGrid } from "@/features/authors";
-import { TopicGrid } from "@/features/categories";
+import { CtaBanner, FeatureGrid, ProcessSteps, SectionHeader } from "@/components/layout";
+import { Reveal } from "@/components/ui";
+import { ArticleGrid } from "@/features/articles";
+import { getLatestArticles } from "@/features/articles/server/article.service";
 import {
-  HeroSection,
-  experts,
-  featuredArticle,
-  latestArticles,
-  topics,
-  trendingArticles,
-} from "@/features/home";
-import { NewsletterSection } from "@/features/newsletter";
+  HomeHero,
+  MissionVision,
+  ServicesMarquee,
+  audiencesServed,
+  coreValues,
+  homeCta,
+  homeIntro,
+  whyVmed,
+} from "@/features/company";
+import { ServiceCard, serviceSummaries } from "@/features/services";
 
-export default function HomePage() {
+export const revalidate = 300;
+
+const container = "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8";
+
+export default async function HomePage() {
+  const latestArticles = await getLatestArticles(3);
+
   return (
     <main className="flex-1">
-      <HeroSection />
+      <HomeHero />
+      <ServicesMarquee />
 
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
-        <SectionHeader
-          overline="Editor's pick"
-          title="Featured article"
-          description="A deep read from this week's clinical editorial desk."
-        />
-        <div className="mt-8">
-          <FeaturedArticle article={featuredArticle} />
+      <section className={`${container} py-20 lg:py-28`}>
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+          <Reveal variant="left">
+            <p className="text-overline">Healthcare Communication</p>
+            <h2 className="mt-3 text-display text-balance">{homeIntro.title}</h2>
+          </Reveal>
+          <Reveal index={1} className="space-y-4 text-lg leading-relaxed text-muted">
+            <p className="text-xl font-semibold text-foreground">{homeIntro.lead}</p>
+            {homeIntro.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </Reveal>
         </div>
-      </section>
 
-      <section className="border-y border-border bg-card/50">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mt-20">
           <SectionHeader
-            overline="Trending"
-            title="What readers are exploring"
-            href="/articles"
-            linkLabel="All articles"
+            align="center"
+            overline="How we work"
+            title={homeIntro.approachTitle}
+            description={homeIntro.approachNote}
           />
-          <div className="mt-8">
-            <ArticleGrid articles={trendingArticles} />
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
-        <SectionHeader
-          overline="Browse"
-          title="Explore topics"
-          description="Start with a specialty area — filters will connect to the article index later."
-          href="/topics"
-          linkLabel="All topics"
-        />
-        <div className="mt-8">
-          <TopicGrid topics={topics} />
-        </div>
-      </section>
-
-      <section className="border-t border-border bg-background">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
-          <SectionHeader
-            overline="Fresh"
-            title="Latest articles"
-            href="/articles"
-            linkLabel="View all"
+          <ProcessSteps
+            className="mt-12"
+            steps={homeIntro.approach.map((title) => ({ title }))}
           />
-          <div className="mt-8">
-            <ArticleGrid articles={latestArticles} />
-          </div>
         </div>
       </section>
 
-      <section className="border-y border-border bg-card/40">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
-          <SectionHeader
-            overline="Experts"
-            title="Written and reviewed by clinicians"
-            description="Placeholder profiles — real credentials will come from the author database."
-            href="/authors"
-            linkLabel="Meet experts"
-          />
-          <div className="mt-8">
-            <ExpertGrid experts={experts} />
-          </div>
+      <section className="relative overflow-hidden border-y border-border bg-card/60 py-20 lg:py-28">
+        <div className={container}>
+          <SectionHeader overline="What We Do" title="Our Services" href="/services" linkLabel="View All Services" />
+          <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {serviceSummaries
+              .filter((service) => service.hasDetailPage)
+              .map((service, index) => (
+                <Reveal as="li" key={service.slug} index={index % 3}>
+                  <ServiceCard service={service} />
+                </Reveal>
+              ))}
+          </ul>
         </div>
       </section>
 
-      <NewsletterSection />
+      <section className={`${container} py-20 lg:py-28`}>
+        <SectionHeader align="center" overline="Who We Serve" title="Partnering Across Healthcare & Life Sciences" />
+        <FeatureGrid className="mt-12" items={audiencesServed} columns={4} marker="check" />
+      </section>
+
+      <section className="relative isolate overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background py-20 lg:py-28">
+        <div className={container}>
+          <SectionHeader align="center" overline="Why VMed Research?" title="Medical Understanding Meets Professional Writing" />
+          <FeatureGrid className="mt-12" items={whyVmed} columns={3} />
+        </div>
+      </section>
+
+      <section className={`${container} py-20 lg:py-24`}>
+        <MissionVision />
+        <div className="mt-20">
+          <SectionHeader align="center" overline="Core Values" title="What Guides Every Project" />
+          <FeatureGrid className="mt-12" items={coreValues} columns={3} marker="none" />
+        </div>
+      </section>
+
+      {latestArticles.length > 0 ? (
+        <section className="border-t border-border bg-card/60 py-20">
+          <div className={container}>
+            <SectionHeader
+              overline="Resources"
+              title="Latest Insights"
+              href="/resources"
+              linkLabel="Explore Resources"
+            />
+            <Reveal className="mt-10">
+              <ArticleGrid articles={latestArticles} />
+            </Reveal>
+          </div>
+        </section>
+      ) : null}
+
+      <CtaBanner
+        title={homeCta.title}
+        body={homeCta.body}
+        primary={homeCta.primary}
+        secondary={{ href: "/services", label: "Explore Our Services" }}
+      />
     </main>
   );
 }

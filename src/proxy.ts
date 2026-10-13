@@ -22,6 +22,7 @@ const PUBLIC_WRITE_ROUTES = new Set([
   "/api/auth/forgot-password",
   "/api/auth/reset-password",
   "/api/newsletter",
+  "/api/enquiries",
 ]);
 
 const WRITE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);

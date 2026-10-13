@@ -38,6 +38,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return ["/topics", "/topics/:slug", "/research", "/authors"].map((source) => ({
+      source,
+      destination: "/resources",
+      permanent: false,
+    }));
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

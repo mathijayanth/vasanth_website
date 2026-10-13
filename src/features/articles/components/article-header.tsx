@@ -14,7 +14,7 @@ export function ArticleHeader({ article, shareUrl }: ArticleHeaderProps) {
   return (
     <header className="max-w-3xl">
       <Link
-        href={`/topics/${article.categorySlug}`}
+        href={`/articles?category=${article.categorySlug}`}
         className="inline-flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <Badge variant="secondary">{article.category}</Badge>

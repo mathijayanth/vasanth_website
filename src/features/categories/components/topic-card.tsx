@@ -10,7 +10,7 @@ type TopicCardProps = {
 export function TopicCard({ topic, className }: TopicCardProps) {
   return (
     <Link
-      href={`/topics/${topic.slug}`}
+      href={`/articles?category=${topic.slug}`}
       className={cn(
         "group flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-card sm:p-6",
         className,
