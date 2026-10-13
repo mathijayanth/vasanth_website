@@ -10,7 +10,7 @@ const envSchema = z.object({
   UI_PREVIEW: z.enum(["0", "1"]).default("0"),
   DATABASE_URL: z.string().url().optional(),
   AUTH_SECRET: isProduction
-    ? z.string().min(32, "AUTH_SECRET must be at least 32 characters in production")
+    ? z.string().min(32, "AUTH_SECRET must be at least 32 characters in production").optional()
     : z.string().min(16, "AUTH_SECRET must be at least 16 characters").optional(),
   EMAIL_FROM: z.string().min(3).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
@@ -43,8 +43,13 @@ function loadEnv() {
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
   });
   if (pairIssue) issues.push(pairIssue);
-  if (parsed.success && parsed.data.UI_PREVIEW !== "1" && !parsed.data.DATABASE_URL) {
-    issues.push("  - DATABASE_URL: Required (or set UI_PREVIEW=1 to run without a database)");
+  if (parsed.success && parsed.data.UI_PREVIEW !== "1") {
+    if (!parsed.data.DATABASE_URL) {
+      issues.push("  - DATABASE_URL: Required (or set UI_PREVIEW=1 to run without a database)");
+    }
+    if (isProduction && !parsed.data.AUTH_SECRET) {
+      issues.push("  - AUTH_SECRET: Required in production (or set UI_PREVIEW=1 for a UI-only preview)");
+    }
   }
 
   if (!parsed.success || issues.length > 0) {
