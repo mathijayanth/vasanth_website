@@ -1,4 +1,5 @@
 import "server-only";
+import { escapeHtml } from "@/lib/utils";
 import { sendMail } from "@/server/email/mailer";
 
 export function sendPasswordResetEmail(to: string, resetUrl: string) {
@@ -13,7 +14,7 @@ export function sendPasswordResetEmail(to: string, resetUrl: string) {
 
   const html = `
     <p>We received a request to reset your VitalNotes password.</p>
-    <p><a href="${resetUrl}">Reset your password</a> (link expires in 1 hour).</p>
+    <p><a href="${escapeHtml(resetUrl)}">Reset your password</a> (link expires in 1 hour).</p>
     <p>If you did not request this, you can ignore this email.</p>
   `.trim();
 

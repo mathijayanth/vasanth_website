@@ -8,6 +8,7 @@ import {
   canManageCategories,
 } from "@/features/auth/permissions";
 import { getSessionFromRequest } from "@/features/auth/session-edge";
+import { siteConfig } from "@/config/site";
 
 /**
  * First line of defence only: checks that a valid session exists and the role is plausible.
@@ -27,20 +28,33 @@ const WRITE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 const ARTICLE_ITEM_PATH = /^\/api\/articles\/[^/]+$/;
 
-function apiErrorResponse(code: "UNAUTHORIZED" | "FORBIDDEN") {
+function apiErrorResponse(code: "UNAUTHORIZED" | "FORBIDDEN", message?: string) {
   const isUnauthorized = code === "UNAUTHORIZED";
   return NextResponse.json(
     {
       success: false,
       error: {
         code,
-        message: isUnauthorized
-          ? "Authentication required"
-          : "You do not have permission for this action",
+        message:
+          message ??
+          (isUnauthorized
+            ? "Authentication required"
+            : "You do not have permission for this action"),
       },
     },
     { status: isUnauthorized ? 401 : 403 },
   );
+}
+
+// Cookie-authenticated writes must come from our own pages. Requests without an
+// Origin header (curl, server-to-server) carry no victim cookies, so they are allowed.
+function isCrossSiteRequest(request: NextRequest): boolean {
+  const origin = request.headers.get("origin");
+  if (origin) {
+    const allowed = new Set([request.nextUrl.origin, new URL(siteConfig.url).origin]);
+    return !allowed.has(origin);
+  }
+  return request.headers.get("sec-fetch-site") === "cross-site";
 }
 
 function isApiWriteAllowed(pathname: string, method: string, role: UserRole): boolean {
@@ -73,7 +87,15 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (!WRITE_METHODS.has(method) || PUBLIC_WRITE_ROUTES.has(pathname)) {
+  if (!WRITE_METHODS.has(method)) {
+    return NextResponse.next();
+  }
+
+  if (isCrossSiteRequest(request)) {
+    return apiErrorResponse("FORBIDDEN", "Cross-site request blocked");
+  }
+
+  if (PUBLIC_WRITE_ROUTES.has(pathname)) {
     return NextResponse.next();
   }
 

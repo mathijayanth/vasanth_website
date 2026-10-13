@@ -30,6 +30,10 @@ function slugify(value: string): string {
 }
 
 async function main() {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Refusing to seed: this script deletes all data and must not run in production.");
+  }
+
   const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "ChangeMe-Dev-Only!";
   const passwordHash = await hash(adminPassword, 12);
 
