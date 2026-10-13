@@ -24,6 +24,11 @@ export function handleRouteError(error: unknown) {
     }
   }
 
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    console.error("[db] database unavailable:", error.errorCode ?? "no error code");
+    return apiError("SERVICE_UNAVAILABLE", "Service temporarily unavailable", 503);
+  }
+
   console.error(error);
   return apiError("INTERNAL_ERROR", "An unexpected error occurred", 500);
 }

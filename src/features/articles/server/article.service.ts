@@ -1,5 +1,6 @@
 import "server-only";
 import type { UserRole } from "@prisma/client";
+import { env } from "@/config/env";
 import { authorRepository } from "@/features/authors/server/author.repository";
 import type { SessionUser } from "@/features/auth/server/session";
 import { categoryRepository } from "@/features/categories/server/category.repository";
@@ -147,6 +148,9 @@ export type ArticlesPageResult = {
 };
 
 export async function getArticlesPage(query: ParsedArticlesQuery): Promise<ArticlesPageResult> {
+  if (env.uiPreview) {
+    return { items: [], featured: [], total: 0, totalPages: 1, page: 1, pageSize: ARTICLE_PAGE_SIZE };
+  }
   const filters: ArticleFilters = {
     status: "PUBLISHED",
     search: query.search || undefined,
@@ -183,21 +187,25 @@ export async function getArticlesPage(query: ParsedArticlesQuery): Promise<Artic
 }
 
 export async function getLatestArticles(limit = 3): Promise<ArticleSummary[]> {
+  if (env.uiPreview) return [];
   const rows = await articleRepository.findMany({ filters: { status: "PUBLISHED" }, take: limit });
   return rows.map(toArticleSummary);
 }
 
-export function countPublishedArticles(): Promise<number> {
+export async function countPublishedArticles(): Promise<number> {
+  if (env.uiPreview) return 0;
   return articleRepository.count({ status: "PUBLISHED" });
 }
 
 export async function getPublishedArticle(slug: string): Promise<ArticleDetail | null> {
+  if (env.uiPreview) return null;
   const article = await articleRepository.findBySlug(slug);
   if (!article || article.status !== "PUBLISHED") return null;
   return toArticleDetail(article);
 }
 
-export function getPublishedArticleSlugs(): Promise<string[]> {
+export async function getPublishedArticleSlugs(): Promise<string[]> {
+  if (env.uiPreview) return [];
   return articleRepository.findPublishedSlugs();
 }
 

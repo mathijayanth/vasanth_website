@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/layout";
+import { env } from "@/config/env";
 import { Reveal } from "@/components/ui";
 import { contact } from "@/features/company";
 import { EnquiryForm } from "@/features/enquiries";
@@ -24,7 +25,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
             <h2 className="text-2xl font-bold tracking-tight">{contact.formTitle}</h2>
             <p className="mt-2 text-muted">{contact.support}</p>
             <div className="mt-8">
-              <EnquiryForm defaultService={defaultService} />
+              <EnquiryForm defaultService={defaultService} disabled={env.uiPreview} />
             </div>
           </Reveal>
 

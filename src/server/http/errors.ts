@@ -7,6 +7,7 @@ export type ApiErrorCode =
   | "RATE_LIMITED"
   | "VALIDATION_ERROR"
   | "EMAIL_FAILED"
+  | "SERVICE_UNAVAILABLE"
   | "INTERNAL_ERROR";
 
 const STATUS_BY_CODE: Record<ApiErrorCode, number> = {
@@ -18,6 +19,7 @@ const STATUS_BY_CODE: Record<ApiErrorCode, number> = {
   RATE_LIMITED: 429,
   VALIDATION_ERROR: 400,
   EMAIL_FAILED: 503,
+  SERVICE_UNAVAILABLE: 503,
   INTERNAL_ERROR: 500,
 };
 

@@ -7,7 +7,14 @@ import { enquirySchema, enquiryServiceOptions } from "../enquiries.schemas";
 type FieldErrors = Partial<Record<string, string>>;
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function EnquiryForm({ defaultService }: { defaultService?: string }) {
+export function EnquiryForm({
+  defaultService,
+  disabled = false,
+}: {
+  defaultService?: string;
+  /** Renders the form read-only, e.g. on a preview deployment without a database. */
+  disabled?: boolean;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [message, setMessage] = useState("");
@@ -84,6 +91,11 @@ export function EnquiryForm({ defaultService }: { defaultService?: string }) {
 
   return (
     <form noValidate onSubmit={onSubmit} className="relative grid gap-5 sm:grid-cols-2">
+      {disabled ? (
+        <p role="note" className="rounded-2xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm font-medium text-foreground sm:col-span-2">
+          This is a design preview. Enquiry submissions are switched off for now.
+        </p>
+      ) : null}
       <Input id="enquiry-name" name="name" label="Name" placeholder="Enter your name" autoComplete="name" required error={errors.name} />
       <Input
         id="enquiry-organization"
@@ -157,7 +169,7 @@ export function EnquiryForm({ defaultService }: { defaultService?: string }) {
       ) : null}
 
       <div className="sm:col-span-2">
-        <Button type="submit" size="lg" disabled={status === "submitting"} className="w-full sm:w-auto">
+        <Button type="submit" size="lg" disabled={disabled || status === "submitting"} className="w-full sm:w-auto">
           {status === "submitting" ? "Sending…" : "Submit Enquiry"}
         </Button>
       </div>

@@ -1,4 +1,5 @@
 import "server-only";
+import { env } from "@/config/env";
 import type { SessionUser } from "@/features/auth/server/session";
 import { canManageCategories } from "@/features/auth/permissions";
 import { conflict, forbidden } from "@/server/http/errors";
@@ -20,6 +21,7 @@ export async function listCategories(query: CategoriesListQuery) {
 }
 
 export async function getCategoryOptions() {
+  if (env.uiPreview) return [];
   const rows = await categoryRepository.findMany({});
   return rows.map(toCategoryOption);
 }

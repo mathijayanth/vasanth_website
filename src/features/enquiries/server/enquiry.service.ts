@@ -1,11 +1,15 @@
 import "server-only";
 import { env } from "@/config/env";
 import { sendMail } from "@/server/email/mailer";
+import { AppError } from "@/server/http/errors";
 import { escapeHtml } from "@/lib/utils";
 import { enquiryServiceLabel, type EnquiryInput } from "../enquiries.schemas";
 import { enquiryRepository } from "./enquiry.repository";
 
 export async function submitEnquiry(input: EnquiryInput): Promise<{ id: string } | null> {
+  if (env.uiPreview) {
+    throw new AppError("SERVICE_UNAVAILABLE", "Enquiries are disabled in this preview");
+  }
   if (input.website) return null;
 
   const data = {
