@@ -12,7 +12,19 @@ const envSchema = z.object({
     : z.string().min(16, "AUTH_SECRET must be at least 16 characters").optional(),
   EMAIL_FROM: z.string().min(3).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
+  UPSTASH_REDIS_REST_URL: z.string().url().startsWith("https://").optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
 });
+
+export function upstashPairIssue(values: {
+  UPSTASH_REDIS_REST_URL?: string;
+  UPSTASH_REDIS_REST_TOKEN?: string;
+}): string | null {
+  const hasUrl = Boolean(values.UPSTASH_REDIS_REST_URL);
+  const hasToken = Boolean(values.UPSTASH_REDIS_REST_TOKEN);
+  if (hasUrl === hasToken) return null;
+  return "  - UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN: set both or neither";
+}
 
 function loadEnv() {
   if (process.env.SKIP_ENV_VALIDATION === "1") {
@@ -20,11 +32,17 @@ function loadEnv() {
   }
 
   const parsed = envSchema.safeParse(process.env);
-  if (!parsed.success) {
-    const issues = parsed.error.issues
-      .map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`)
-      .join("\n");
-    throw new Error(`Invalid environment variables:\n${issues}\nSee .env.example.`);
+  const issues = parsed.success
+    ? []
+    : parsed.error.issues.map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`);
+  const pairIssue = upstashPairIssue({
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+  });
+  if (pairIssue) issues.push(pairIssue);
+
+  if (!parsed.success || issues.length > 0) {
+    throw new Error(`Invalid environment variables:\n${issues.join("\n")}\nSee .env.example.`);
   }
   return parsed.data;
 }
@@ -42,4 +60,8 @@ export const env = {
     from: raw.EMAIL_FROM,
     resendApiKey: raw.RESEND_API_KEY,
   },
+  upstash:
+    raw.UPSTASH_REDIS_REST_URL && raw.UPSTASH_REDIS_REST_TOKEN
+      ? { url: raw.UPSTASH_REDIS_REST_URL, token: raw.UPSTASH_REDIS_REST_TOKEN }
+      : null,
 } as const;

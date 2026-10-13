@@ -6,7 +6,7 @@ import { enforceRateLimit } from "@/server/http/rate-limit";
 import { apiSuccess } from "@/server/http/response";
 
 export const POST = withErrorHandling(async (request) => {
-  enforceRateLimit(request, { bucket: "auth-forgot-password", limit: 5, windowMs: 60_000 });
+  await enforceRateLimit(request, { bucket: "auth-forgot-password", limit: 5, windowMs: 60_000 });
   const input = await parseJsonBody(forgotPasswordSchema, request);
   const { devResetUrl } = await requestPasswordReset(input);
   return apiSuccess(devResetUrl ? { resetUrl: devResetUrl } : {}, {

@@ -73,6 +73,10 @@ Sessions use an HTTP-only cookie (`vitalnotes_session`) backed by a signed JWT. 
 
 **Password reset email:** Configure `RESEND_API_KEY` and `EMAIL_FROM` (verified sender in Resend) to send real mail in all environments. Without that, non-production responses may include a `resetUrl` in the JSON body and the server logs the link.
 
+**Session revocation:** each token carries the user's `sessionVersion`. A password reset or `POST /api/auth/logout-all` increments it, which invalidates every existing session for that user. API routes and admin pages check the version against the database. The proxy only checks the token signature, so it cannot see revocations, but the admin layout re-checks and redirects to login. Tokens issued before this change have no version claim, so every user must sign in once after rollout.
+
+**Rate limiting:** set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` to share limits across instances. Without them, or while Redis is unreachable, limits fall back to per-instance memory and `GET /api/health` reports `rateLimit: "memory"` or `"memory-fallback"`. Login allows 5 failed attempts per email per 15 minutes and forgot-password 3 requests per email per hour, both on top of the per-IP limits.
+
 ## Content data
 
 - **`/articles` and `/articles/[slug]`** load **published** articles from PostgreSQL.
@@ -87,6 +91,7 @@ Sessions use an HTTP-only cookie (`vitalnotes_session`) backed by a signed JWT. 
 | `npm run start` | Serve production build |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript (`tsc --noEmit`) |
+| `npm test` | Unit tests (`node:test` via `tsx`; no database or Redis needed) |
 | `npm run db:validate` | Validate Prisma schema |
 | `npm run db:migrate` | Create/apply migrations (dev) |
 | `npm run db:seed` | Seed PLACEHOLDER data |

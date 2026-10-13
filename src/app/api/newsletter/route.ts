@@ -6,7 +6,7 @@ import { enforceRateLimit } from "@/server/http/rate-limit";
 import { apiSuccess } from "@/server/http/response";
 
 export const POST = withErrorHandling(async (request) => {
-  enforceRateLimit(request, { bucket: "newsletter-subscribe", limit: 5, windowMs: 60_000 });
+  await enforceRateLimit(request, { bucket: "newsletter-subscribe", limit: 5, windowMs: 60_000 });
   const input = await parseJsonBody(newsletterSchema, request);
   await subscribe(input);
   return apiSuccess({ subscribed: true }, { message: "Subscribed successfully", status: 201 });

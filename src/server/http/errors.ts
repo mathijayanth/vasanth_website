@@ -36,6 +36,16 @@ export class AppError extends Error {
   }
 }
 
+export class RateLimitError extends AppError {
+  readonly retryAfterSeconds: number;
+
+  constructor(retryAfterSeconds: number) {
+    super("RATE_LIMITED", "Too many requests. Please try again later.");
+    this.name = "RateLimitError";
+    this.retryAfterSeconds = retryAfterSeconds;
+  }
+}
+
 export const badRequest = (message: string) => new AppError("BAD_REQUEST", message);
 export const unauthorized = (message = "Authentication required") =>
   new AppError("UNAUTHORIZED", message);

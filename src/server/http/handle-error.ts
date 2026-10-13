@@ -1,10 +1,16 @@
 import "server-only";
 import type { NextRequest } from "next/server";
 import { Prisma } from "@prisma/client";
-import { AppError } from "./errors";
+import { AppError, RateLimitError } from "./errors";
 import { apiError } from "./response";
 
 export function handleRouteError(error: unknown) {
+  if (error instanceof RateLimitError) {
+    const response = apiError(error.code, error.message, error.status);
+    response.headers.set("Retry-After", String(error.retryAfterSeconds));
+    return response;
+  }
+
   if (error instanceof AppError) {
     return apiError(error.code, error.message, error.status, error.details);
   }

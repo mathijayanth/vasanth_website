@@ -8,6 +8,8 @@ export type SessionClaims = {
   id: string;
   email: string;
   role: UserRole;
+  /** Must equal `User.sessionVersion`; bumping the column revokes every older token. */
+  sessionVersion: number;
   name?: string | null;
 };
 
@@ -21,11 +23,20 @@ export function isAuthConfigured(): boolean {
   return getAuthSecret() !== null;
 }
 
+function isValidSessionVersion(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
 export async function signSessionToken(claims: SessionClaims): Promise<string | null> {
   const secret = getAuthSecret();
   if (!secret) return null;
 
-  return new SignJWT({ email: claims.email, role: claims.role, name: claims.name ?? null })
+  return new SignJWT({
+    email: claims.email,
+    role: claims.role,
+    name: claims.name ?? null,
+    sv: claims.sessionVersion,
+  })
     .setSubject(claims.id)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -33,17 +44,19 @@ export async function signSessionToken(claims: SessionClaims): Promise<string | 
     .sign(secret);
 }
 
+/** Tokens issued before `sv` existed are rejected, so every user signs in once after rollout. */
 export async function verifySessionToken(token: string): Promise<SessionClaims | null> {
   const secret = getAuthSecret();
   if (!secret) return null;
 
   try {
     const { payload } = await jwtVerify(token, secret, { algorithms: ["HS256"] });
-    const { sub: id, email, role } = payload;
+    const { sub: id, email, role, sv } = payload;
     if (typeof id !== "string" || typeof email !== "string" || typeof role !== "string") {
       return null;
     }
-    return { id, email, role: role as UserRole };
+    if (!isValidSessionVersion(sv)) return null;
+    return { id, email, role: role as UserRole, sessionVersion: sv };
   } catch {
     return null;
   }

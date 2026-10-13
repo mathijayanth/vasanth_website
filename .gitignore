@@ -30,6 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# local database dumps (contain user data and password hashes)
+backups/
+
 # env files
 .env
 .env.local

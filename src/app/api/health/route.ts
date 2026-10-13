@@ -1,5 +1,6 @@
 import { pingDatabase } from "@/server/db/health.repository";
 import { withErrorHandling } from "@/server/http/handle-error";
+import { getRateLimitBackend } from "@/server/http/rate-limit";
 import { apiError, apiSuccess } from "@/server/http/response";
 
 export const dynamic = "force-dynamic";
@@ -9,5 +10,5 @@ export const GET = withErrorHandling(async () => {
   if (!databaseUp) {
     return apiError("INTERNAL_ERROR", "Service unavailable", 503);
   }
-  return apiSuccess({ status: "ok", database: "up" });
+  return apiSuccess({ status: "ok", database: "up", rateLimit: getRateLimitBackend() });
 });

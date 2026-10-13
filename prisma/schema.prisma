@@ -37,6 +37,8 @@ model User {
   passwordHash String?
   name         String?
   role         UserRole @default(USER)
+  /// Incremented to revoke every session token issued for this user.
+  sessionVersion Int    @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

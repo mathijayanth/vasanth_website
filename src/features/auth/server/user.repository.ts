@@ -2,7 +2,13 @@ import "server-only";
 import type { UserRole } from "@prisma/client";
 import { db } from "@/server/db/client";
 
-const sessionUserSelect = { id: true, email: true, role: true, name: true } as const;
+const sessionUserSelect = {
+  id: true,
+  email: true,
+  role: true,
+  name: true,
+  sessionVersion: true,
+} as const;
 
 export const userRepository = {
   findSessionUser(id: string) {
@@ -28,7 +34,12 @@ export const userRepository = {
     await db.user.create({ data, select: { id: true } });
   },
 
-  async updatePassword(id: string, passwordHash: string) {
-    await db.user.update({ where: { id }, data: { passwordHash } });
+  /** Atomic increment: revokes every session token issued for the user. */
+  async incrementSessionVersion(id: string) {
+    await db.user.update({
+      where: { id },
+      data: { sessionVersion: { increment: 1 } },
+      select: { id: true },
+    });
   },
 };
