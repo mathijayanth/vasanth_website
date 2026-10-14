@@ -30,7 +30,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
           </Reveal>
 
           <div className="space-y-6">
-            <Reveal index={1} className="relative isolate overflow-hidden rounded-[2rem] bg-foreground p-8 text-white shadow-elevated">
+            <Reveal index={1} className="relative isolate overflow-hidden rounded-[2rem] bg-primary p-8 text-white shadow-elevated">
               <div aria-hidden className="absolute -right-16 -top-16 -z-10 size-56 animate-float rounded-full bg-primary/50 blur-3xl" />
               <div aria-hidden className="absolute -bottom-20 -left-10 -z-10 size-56 animate-float-slow rounded-full bg-secondary/40 blur-3xl" />
               <h2 className="text-xl font-bold">{contact.asideTitle}</h2>
@@ -47,7 +47,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
               <ul className="mt-4 space-y-2.5">
                 {enquiryServiceOptions.map((option) => (
                   <li key={option.value} className="flex items-center gap-3 text-sm font-medium text-foreground">
-                    <span aria-hidden className="size-1.5 rounded-full bg-gradient-to-r from-primary to-secondary" />
+                    <span aria-hidden className="size-1.5 rounded-full bg-accent" />
                     {option.label}
                   </li>
                 ))}

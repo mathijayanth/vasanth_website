@@ -20,22 +20,14 @@ export function CtaBanner({
   className,
 }: CtaBannerProps) {
   return (
-    <section className={cn("mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8", className)}>
-      <Reveal
-        variant="scale"
-        className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary via-primary to-secondary bg-[length:200%_200%] px-6 py-14 text-center text-white shadow-elevated animate-gradient-pan sm:px-12 sm:py-20"
-      >
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -left-20 -top-20 size-72 animate-float rounded-full bg-white/15 blur-3xl" />
-          <div className="absolute -bottom-24 -right-16 size-80 animate-float-slow rounded-full bg-secondary/40 blur-3xl" />
-          <div className="bg-grid mask-fade-bottom absolute inset-0 opacity-40 invert" />
-        </div>
-        <h2 className="mx-auto max-w-3xl text-title text-balance">{title}</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/85">{body}</p>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+    <section className={cn("bg-primary", className)}>
+      <Reveal className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_1fr_auto] lg:px-8 lg:py-14">
+        <h2 className="text-title text-balance text-white">{title}</h2>
+        <p className="text-lg leading-relaxed text-white/80">{body}</p>
+        <div className="flex flex-wrap items-center gap-3">
           <Link
             href={primary.href}
-            className="group inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-7 font-semibold text-primary shadow-elevated transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
+            className="group inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-7 font-semibold text-primary shadow-soft transition-all duration-300 hover:-translate-y-0.5"
           >
             {primary.label}
             <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>

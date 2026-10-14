@@ -12,15 +12,15 @@ export function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       <div className="bg-grid mask-fade-bottom absolute inset-0" />
-      <div className="absolute -left-24 -top-32 size-[30rem] animate-float rounded-full bg-primary/20 blur-3xl" />
-      <div className="absolute -right-24 top-10 size-[26rem] animate-float-slow rounded-full bg-secondary/20 blur-3xl" />
+      <div className="absolute -left-24 -top-32 size-[30rem] rounded-full bg-accent/35 blur-3xl" />
+      <div className="absolute -right-24 top-10 size-[26rem] rounded-full bg-secondary/10 blur-3xl" />
     </div>
   );
 }
 
 export function PageHero({ overline, title, lead, children, className }: PageHeroProps) {
   return (
-    <section className={cn("relative isolate -mt-[76px] pt-[76px]", className)}>
+    <section className={cn("relative isolate", className)}>
       <HeroBackdrop />
       <div className="mx-auto max-w-4xl px-4 pb-16 pt-14 text-center sm:px-6 sm:pb-20 sm:pt-20 lg:px-8">
         {overline ? (
@@ -32,7 +32,7 @@ export function PageHero({ overline, title, lead, children, className }: PageHer
             {overline}
           </p>
         ) : null}
-        <h1 className="mt-6 animate-fade-up text-display text-balance [animation-delay:100ms]">{title}</h1>
+        <h1 className="mt-6 animate-fade-up text-display text-balance text-primary [animation-delay:100ms]">{title}</h1>
         {lead ? (
           <p className="mx-auto mt-6 max-w-2xl animate-fade-up text-lg leading-relaxed text-muted [animation-delay:200ms]">
             {lead}

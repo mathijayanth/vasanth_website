@@ -18,7 +18,7 @@ export default function ServicesPage() {
       <PageHero overline="Services" title={servicesIntro.title} lead={servicesIntro.body}>
         <Link
           href="/contact"
-          className="inline-flex min-h-12 items-center rounded-full bg-gradient-to-r from-primary to-secondary px-7 font-semibold text-white shadow-elevated transition-transform duration-300 hover:-translate-y-0.5"
+          className="inline-flex min-h-12 items-center rounded-full bg-primary px-7 font-semibold text-white shadow-elevated transition-transform duration-300 hover:-translate-y-0.5 hover:bg-secondary"
         >
           Start a Project
         </Link>
@@ -46,7 +46,7 @@ export default function ServicesPage() {
               <div id={service.slug} className="grid gap-8 p-8 sm:p-10 lg:grid-cols-[1fr_1.2fr]">
                 <div>
                   <div className="flex items-center gap-4">
-                    <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-white shadow-soft">
+                    <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-primary text-white shadow-soft">
                       <ServiceIcon name={service.icon} className="size-7" />
                     </span>
                     <span className="font-mono text-sm font-semibold text-muted">{service.number}</span>

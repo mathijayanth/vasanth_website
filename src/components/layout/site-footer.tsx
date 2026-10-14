@@ -8,10 +8,10 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto overflow-hidden bg-foreground text-white">
+    <footer className="relative mt-auto overflow-hidden bg-primary text-white">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-32 -top-40 size-[28rem] animate-float rounded-full bg-primary/25 blur-3xl" />
-        <div className="absolute -bottom-40 -right-24 size-[26rem] animate-float-slow rounded-full bg-secondary/20 blur-3xl" />
+        <div className="absolute -left-32 -top-40 size-[28rem] rounded-full bg-secondary/30 blur-3xl" />
+        <div className="absolute -bottom-40 -right-24 size-[26rem] rounded-full bg-accent/20 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -19,7 +19,7 @@ export function SiteFooter() {
           <div>
             <BrandLogo inverted />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">{siteConfig.tagline}</p>
-            <p className="mt-8 text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Our Commitment</p>
+            <p className="mt-8 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Our Commitment</p>
             <ul className="mt-3 flex flex-wrap gap-2">
               {footerCommitment.map((value) => (
                 <li
@@ -65,7 +65,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">{title}</h2>
+      <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">{title}</h2>
       <ul className="mt-4 space-y-2.5">
         {links.map((link) => (
           <li key={link.href}>
@@ -73,7 +73,7 @@ function FooterColumn({
               href={link.href}
               className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white"
             >
-              <span aria-hidden className="h-px w-0 bg-secondary transition-all duration-300 group-hover:w-3" />
+              <span aria-hidden className="h-px w-0 bg-accent transition-all duration-300 group-hover:w-3" />
               {link.label}
             </Link>
           </li>

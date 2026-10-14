@@ -134,13 +134,11 @@ export function SiteHeader() {
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 px-3 pt-3 sm:px-4">
+    <header className="sticky top-0 z-50 border-b border-transparent bg-background/80 backdrop-blur-xl">
       <div
         className={cn(
-          "mx-auto flex h-16 max-w-6xl items-center gap-3 rounded-full border px-3 pl-5 transition-all duration-500 sm:px-4 sm:pl-6",
-          scrolled
-            ? "border-border/80 bg-card/80 shadow-elevated backdrop-blur-xl"
-            : "border-transparent bg-transparent",
+          "mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 transition-shadow duration-500 sm:px-6 lg:px-8",
+          scrolled && "shadow-[0_1px_0_0_var(--border)]",
         )}
       >
         <BrandLogo />
@@ -176,7 +174,7 @@ export function SiteHeader() {
         <Link
           href="/contact"
           className={cn(
-            "group ml-auto hidden items-center gap-2 rounded-full bg-foreground px-5 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:bg-primary hover:shadow-elevated sm:inline-flex lg:ml-2",
+            "group ml-auto hidden items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:bg-secondary hover:shadow-elevated sm:inline-flex lg:ml-2",
             touchTarget,
             focusRing,
           )}
@@ -268,7 +266,7 @@ export function SiteHeader() {
             <Link
               href="/contact"
               className={cn(
-                "mt-4 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-5 font-semibold text-white shadow-soft",
+                "mt-4 inline-flex items-center justify-center rounded-full bg-primary px-5 font-semibold text-white shadow-soft",
                 touchTarget,
                 focusRing,
               )}

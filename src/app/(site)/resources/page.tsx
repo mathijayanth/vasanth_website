@@ -24,7 +24,7 @@ export default async function ResourcesPage() {
         <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/articles"
-            className="inline-flex min-h-12 items-center rounded-full bg-gradient-to-r from-primary to-secondary px-7 font-semibold text-white shadow-elevated transition-transform duration-300 hover:-translate-y-0.5"
+            className="inline-flex min-h-12 items-center rounded-full bg-primary px-7 font-semibold text-white shadow-elevated transition-transform duration-300 hover:-translate-y-0.5 hover:bg-secondary"
           >
             Explore All Resources
           </Link>
@@ -48,7 +48,7 @@ export default async function ResourcesPage() {
       <section className={`${container} pb-20`}>
         <Reveal
           variant="scale"
-          className="relative isolate overflow-hidden rounded-[2rem] bg-foreground p-8 text-white shadow-elevated sm:p-12"
+          className="relative isolate overflow-hidden rounded-[2rem] bg-primary p-8 text-white shadow-elevated sm:p-12"
         >
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute -right-24 -top-24 size-80 animate-float rounded-full bg-primary/40 blur-3xl" />

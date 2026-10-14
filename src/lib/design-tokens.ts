@@ -3,12 +3,13 @@
  * Use Tailwind utilities in components; import these for JS-driven UI or docs.
  */
 export const colors = {
-  background: "#F8FAFC",
-  primary: "#2563EB",
-  secondary: "#14B8A6",
-  text: "#0F172A",
-  muted: "#64748B",
-  border: "#E2E8F0",
+  background: "#F8F5EF",
+  primary: "#51105F",
+  secondary: "#7D368C",
+  accent: "#D0BDA1",
+  text: "#3A1844",
+  muted: "#6F5D68",
+  border: "#E6DDD0",
   card: "#FFFFFF",
   success: "#16A34A",
   warning: "#F59E0B",

@@ -1,18 +1,21 @@
-import { CtaBanner, FeatureGrid, ProcessSteps, SectionHeader } from "@/components/layout";
+import Link from "next/link";
+import { CtaBanner, ProcessSteps, SectionHeader } from "@/components/layout";
 import { Reveal } from "@/components/ui";
 import { ArticleGrid } from "@/features/articles";
 import { getLatestArticles } from "@/features/articles/server/article.service";
 import {
   HomeHero,
   MissionVision,
-  ServicesMarquee,
   audiencesServed,
-  coreValues,
   homeCta,
   homeIntro,
   whyVmed,
 } from "@/features/company";
-import { ServiceCard, serviceSummaries } from "@/features/services";
+import { AudienceIcon, WhyIcon } from "@/features/company/components/audience-icon";
+import { IconTile } from "@/features/company/components/icon-tile";
+import { PhotoOrb } from "@/features/company/components/photo-orb";
+import { siteImages } from "@/features/company/lib/site-images";
+import { ServiceIcon, serviceHref, serviceSummaries } from "@/features/services";
 
 export const revalidate = 300;
 
@@ -24,73 +27,110 @@ export default async function HomePage() {
   return (
     <main className="flex-1">
       <HomeHero />
-      <ServicesMarquee />
 
-      <section className={`${container} py-20 lg:py-28`}>
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-          <Reveal variant="left">
-            <p className="text-overline">Healthcare Communication</p>
-            <h2 className="mt-3 text-display text-balance">{homeIntro.title}</h2>
-          </Reveal>
-          <Reveal index={1} className="space-y-4 text-lg leading-relaxed text-muted">
-            <p className="text-xl font-semibold text-foreground">{homeIntro.lead}</p>
-            {homeIntro.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </Reveal>
-        </div>
-
-        <div className="mt-20">
-          <SectionHeader
-            align="center"
-            overline="How we work"
-            title={homeIntro.approachTitle}
-            description={homeIntro.approachNote}
-          />
-          <ProcessSteps
-            className="mt-12"
-            steps={homeIntro.approach.map((title) => ({ title }))}
-          />
-        </div>
+      <section className={`${container} py-16 lg:py-20`}>
+        <SectionHeader
+          align="center"
+          title={homeIntro.approachTitle}
+          description="Evidence-Based · Research · Clarity · Accuracy"
+        />
+        <ProcessSteps
+          className="mt-12"
+          steps={homeIntro.approach.map((title) => ({ title }))}
+        />
       </section>
 
-      <section className="relative overflow-hidden border-y border-border bg-card/60 py-20 lg:py-28">
+      <section className="py-16 lg:py-20">
         <div className={container}>
-          <SectionHeader overline="What We Do" title="Our Services" href="/services" linkLabel="View All Services" />
-          <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {serviceSummaries
-              .filter((service) => service.hasDetailPage)
-              .map((service, index) => (
-                <Reveal as="li" key={service.slug} index={index % 3}>
-                  <ServiceCard service={service} />
-                </Reveal>
-              ))}
+          <SectionHeader
+            overline="What We Do"
+            title="Our Services"
+            href="/services"
+            linkLabel="View All Services"
+          />
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {serviceSummaries.map((service, index) => (
+              <IconTile
+                key={service.slug}
+                href={serviceHref(service)}
+                title={service.name}
+                icon={<ServiceIcon name={service.icon} className="size-6" />}
+                index={index}
+              />
+            ))}
           </ul>
         </div>
       </section>
 
-      <section className={`${container} py-20 lg:py-28`}>
-        <SectionHeader align="center" overline="Who We Serve" title="Partnering Across Healthcare & Life Sciences" />
-        <FeatureGrid className="mt-12" items={audiencesServed} columns={4} marker="check" />
+      <section className={`${container} py-16 lg:py-24`}>
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <Reveal variant="left">
+            <h2 className="text-display text-balance text-primary">{homeIntro.title}</h2>
+            <p className="mt-5 text-xl font-semibold text-foreground">{homeIntro.lead}</p>
+            <div className="mt-4 space-y-4 leading-relaxed text-muted">
+              {homeIntro.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+            <Link
+              href="/about"
+              className="group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"
+            >
+              Know our work
+              <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </Link>
+          </Reveal>
+          <Reveal index={1}>
+            <PhotoOrb src={siteImages.intro.src} alt={siteImages.intro.alt} caption={siteImages.intro.caption} />
+          </Reveal>
+        </div>
       </section>
 
-      <section className="relative isolate overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background py-20 lg:py-28">
+      <section className={`${container} py-16 lg:py-20`}>
+        <SectionHeader
+          align="center"
+          overline="Who We Serve"
+          title="Partnering Across Healthcare & Life Sciences"
+        />
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {audiencesServed.map((audience, index) => (
+            <IconTile
+              key={audience.title}
+              title={audience.title}
+              icon={<AudienceIcon title={audience.title} />}
+              index={index}
+            />
+          ))}
+        </ul>
+      </section>
+
+      <section className="bg-card/50 py-16 lg:py-20">
         <div className={container}>
-          <SectionHeader align="center" overline="Why VMed Research?" title="Medical Understanding Meets Professional Writing" />
-          <FeatureGrid className="mt-12" items={whyVmed} columns={3} />
+          <SectionHeader
+            align="center"
+            overline="Why VMed Research?"
+            title="Medical Understanding Meets Professional Writing"
+          />
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {whyVmed.map((item, index) => (
+              <IconTile
+                key={item.title}
+                title={item.title}
+                description={item.description}
+                icon={<WhyIcon title={item.title} />}
+                index={index}
+              />
+            ))}
+          </ul>
         </div>
       </section>
 
-      <section className={`${container} py-20 lg:py-24`}>
+      <section className={`${container} py-16 lg:py-20`}>
         <MissionVision />
-        <div className="mt-20">
-          <SectionHeader align="center" overline="Core Values" title="What Guides Every Project" />
-          <FeatureGrid className="mt-12" items={coreValues} columns={3} marker="none" />
-        </div>
       </section>
 
       {latestArticles.length > 0 ? (
-        <section className="border-t border-border bg-card/60 py-20">
+        <section className="border-t border-border py-16">
           <div className={container}>
             <SectionHeader
               overline="Resources"
@@ -105,12 +145,7 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      <CtaBanner
-        title={homeCta.title}
-        body={homeCta.body}
-        primary={homeCta.primary}
-        secondary={{ href: "/services", label: "Explore Our Services" }}
-      />
+      <CtaBanner title={homeCta.title} body={homeCta.body} primary={homeCta.primary} />
     </main>
   );
 }

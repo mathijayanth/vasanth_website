@@ -12,7 +12,7 @@ function CheckList({ items, columns = 1 }: { items: readonly string[]; columns?:
     <ul className={columns === 2 ? "grid gap-3 sm:grid-cols-2" : "space-y-3"}>
       {items.map((item, index) => (
         <Reveal as="li" key={item} index={index % 6} variant="left" className="flex items-start gap-3">
-          <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white">
+          <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
             <svg aria-hidden viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.4">
               <path d="M3.5 8.5l3 3 6-7" />
             </svg>

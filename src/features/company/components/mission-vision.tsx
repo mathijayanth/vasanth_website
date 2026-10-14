@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/ui/reveal";
-import { mission, vision } from "../data/company-content";
+import { coreValues, mission, vision } from "../data/company-content";
 
 const panels = [
   { label: "Our Mission", body: mission },
@@ -8,22 +8,25 @@ const panels = [
 
 export function MissionVision() {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-8 lg:grid-cols-3">
       {panels.map((panel, index) => (
-        <Reveal
-          key={panel.label}
-          index={index}
-          variant="scale"
-          className="group relative overflow-hidden rounded-[2rem] bg-foreground p-8 text-white shadow-elevated sm:p-10"
-        >
-          <div
-            aria-hidden
-            className="absolute -right-20 -top-20 size-64 rounded-full bg-gradient-to-br from-primary/50 to-secondary/40 blur-3xl transition-transform duration-700 group-hover:scale-125"
-          />
-          <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-secondary">{panel.label}</p>
-          <p className="relative mt-4 text-xl font-semibold leading-relaxed sm:text-2xl">{panel.body}</p>
+        <Reveal key={panel.label} index={index} className="text-center lg:text-left">
+          <p className="text-overline">{panel.label}</p>
+          <p className="mt-3 text-lg font-semibold leading-relaxed text-primary">{panel.body}</p>
         </Reveal>
       ))}
+      <Reveal index={2} className="text-center lg:text-left">
+        <p className="text-overline">Core Values</p>
+        <p className="mt-3 text-lg font-semibold text-primary">What Guides Every Project</p>
+        <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-medium text-muted">
+          {coreValues.map((value) => (
+            <li key={value.title} className="flex items-center gap-2">
+              <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+              {value.title}
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </div>
   );
 }

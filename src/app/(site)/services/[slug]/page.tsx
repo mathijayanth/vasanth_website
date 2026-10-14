@@ -38,13 +38,13 @@ export default async function ServiceDetailPage({ params }: PageProps<"/services
 
       <PageHero overline={`Service ${service.number}`} title={service.name} lead={detail.intro}>
         <div className="flex flex-col items-center gap-6">
-          <span className="inline-flex size-16 animate-float items-center justify-center rounded-3xl bg-gradient-to-br from-primary to-secondary text-white shadow-elevated">
+          <span className="inline-flex size-16 animate-float items-center justify-center rounded-3xl bg-primary text-white shadow-elevated">
             <ServiceIcon name={service.icon} className="size-8" />
           </span>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href={`/contact?service=${service.slug}`}
-              className="inline-flex min-h-12 items-center rounded-full bg-gradient-to-r from-primary to-secondary px-7 font-semibold text-white shadow-elevated transition-transform duration-300 hover:-translate-y-0.5"
+              className="inline-flex min-h-12 items-center rounded-full bg-primary px-7 font-semibold text-white shadow-elevated transition-transform duration-300 hover:-translate-y-0.5 hover:bg-secondary"
             >
               Request a Quote
             </Link>

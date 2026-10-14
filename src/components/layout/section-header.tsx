@@ -41,7 +41,7 @@ export function SectionHeader({
             ) : null}
           </p>
         ) : null}
-        <h2 className={cn("text-title", overline && "mt-3")}>{title}</h2>
+        <h2 className={cn("text-title text-primary", overline && "mt-3")}>{title}</h2>
         {description ? <p className="mt-3 text-subtitle">{description}</p> : null}
       </div>
       {href ? (

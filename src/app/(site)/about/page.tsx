@@ -28,7 +28,7 @@ export default function AboutPage() {
             className="relative overflow-hidden rounded-[2rem] border border-border bg-card p-8 shadow-card"
           >
             <div aria-hidden className="absolute -right-16 -top-16 size-48 rounded-full bg-secondary/15 blur-3xl" />
-            <h2 className="relative text-2xl font-bold tracking-tight">{about.belief.title}</h2>
+            <h2 className="relative text-2xl font-bold tracking-tight text-primary">{about.belief.title}</h2>
             <p className="relative mt-3 leading-relaxed text-muted">{about.belief.body}</p>
             <p className="relative mt-5 font-semibold text-foreground">{about.belief.lead}</p>
             <ul className="relative mt-4 flex flex-wrap gap-2">

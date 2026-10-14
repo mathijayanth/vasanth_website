@@ -25,11 +25,11 @@ export function FeatureGrid({ items, columns = 3, marker = "number", className }
           as="li"
           key={item.title}
           index={index % 4}
-          className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:border-primary/20 hover:shadow-elevated"
+          className="group relative overflow-hidden rounded-3xl border border-transparent bg-card p-6 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-card"
         >
           <span
             aria-hidden
-            className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100"
+            className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-primary to-accent transition-transform duration-500 group-hover:scale-x-100"
           />
           {marker === "number" ? (
             <span className="text-sm font-bold text-transparent [-webkit-text-stroke:1px_var(--primary)] sm:text-3xl">
@@ -43,7 +43,7 @@ export function FeatureGrid({ items, columns = 3, marker = "number", className }
               </svg>
             </span>
           ) : null}
-          <h3 className={cn("text-lg font-bold tracking-tight text-foreground", marker !== "none" && "mt-4")}>
+          <h3 className={cn("text-lg font-bold tracking-tight text-primary", marker !== "none" && "mt-4")}>
             {item.title}
           </h3>
           {item.description ? (
