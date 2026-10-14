@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { Avatar } from "@/components/ui";
 import { formatArticleDate } from "@/lib/format";
 import type { ArticleReference, MedicalReviewInfo } from "../article.types";

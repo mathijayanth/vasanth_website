@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { homeHero } from "../data/company-content";
 import { siteImages } from "../lib/site-images";
 import { PhotoOrb } from "./photo-orb";

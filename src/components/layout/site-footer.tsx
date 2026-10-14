@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { footerNav, siteConfig } from "@/config/site";
 import { footerCommitment } from "@/features/company";
 import { serviceHref, serviceSummaries } from "@/features/services";

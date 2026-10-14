@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { usePathname } from "next/navigation";
 import { focusRing, touchTarget } from "@/components/ui/primitives";
 import { primaryNavLinks } from "@/config/site";

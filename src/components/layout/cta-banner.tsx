@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 

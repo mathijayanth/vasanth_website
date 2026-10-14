@@ -72,11 +72,15 @@ export function ButtonLink({
   className,
   variant = "primary",
   size = "md",
+  target = "_blank",
+  rel = "noopener noreferrer",
   ...props
 }: ButtonLinkProps) {
   return (
     <Link
       className={cn(baseStyles, variants[variant], sizes[size], className)}
+      target={target}
+      rel={rel}
       {...props}
     />
   );

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { cn } from "@/lib/utils";
 import { serviceHref } from "../data/service-summaries";
 import type { ServiceSummary } from "../services.types";

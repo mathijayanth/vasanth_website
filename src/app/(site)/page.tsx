@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { CtaBanner, ProcessSteps, SectionHeader } from "@/components/layout";
 import { Reveal } from "@/components/ui";
 import { ArticleGrid } from "@/features/articles";

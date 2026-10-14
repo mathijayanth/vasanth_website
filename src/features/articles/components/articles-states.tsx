@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
+import { PageLink as Link } from "@/components/ui/page-link";
 import { ButtonLink, EmptyState } from "@/components/ui";
 import { buildArticlesUrl } from "../lib/search-params";
 
