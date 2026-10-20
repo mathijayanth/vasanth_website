@@ -41,8 +41,8 @@ export function CtaBanner({
     <section
       className={cn(
         isBoxed
-          ? "relative overflow-hidden rounded-2xl bg-primary shadow-elevated"
-          : "bg-primary",
+          ? "relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-secondary shadow-elevated"
+          : "bg-gradient-to-r from-primary to-secondary",
         className,
       )}
     >
@@ -53,8 +53,10 @@ export function CtaBanner({
           !isBoxed && "mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-14",
         )}
       >
-        <h2 className="text-title text-balance text-white">{title}</h2>
-        <p className="text-base leading-relaxed text-white/85 sm:text-lg">{body}</p>
+        <h2 className="text-balance text-lg font-bold leading-snug text-white sm:text-xl lg:text-2xl">
+          {title}
+        </h2>
+        <p className="text-sm leading-relaxed text-white/85 sm:text-base">{body}</p>
         <div className="flex flex-wrap items-center gap-3 lg:justify-end">
           <Link
             href={primary.href}
