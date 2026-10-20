@@ -1,4 +1,4 @@
-import { PageLink as Link } from "@/components/ui/page-link";
+import Link from "next/link";
 
 export default function NotFound() {
   return (

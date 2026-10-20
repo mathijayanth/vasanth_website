@@ -1,4 +1,4 @@
-import { PageLink as Link } from "@/components/ui/page-link";
+import Link from "next/link";
 import Image from "next/image";
 import { Avatar, Badge } from "@/components/ui";
 import { formatArticleDate, formatReadingTime } from "@/lib/format";

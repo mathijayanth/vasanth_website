@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { PageLink as Link } from "@/components/ui/page-link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CtaBanner, PageHero } from "@/components/layout";
+import { PageHero } from "@/components/layout";
 import {
   ServiceDetailView,
   ServiceIcon,
@@ -59,13 +59,6 @@ export default async function ServiceDetailPage({ params }: PageProps<"/services
       </PageHero>
 
       <ServiceDetailView service={service} detail={detail} />
-
-      <CtaBanner
-        title={detail.cta.title}
-        body={detail.cta.body}
-        primary={{ href: `/contact?service=${service.slug}`, label: "Discuss Your Requirements" }}
-        secondary={{ href: `/contact?service=${service.slug}`, label: "Request a Quote" }}
-      />
     </main>
   );
 }

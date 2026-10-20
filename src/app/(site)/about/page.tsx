@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { CtaBanner, FeatureGrid, PageHero, ProcessSteps, SectionHeader } from "@/components/layout";
+import { FeatureGrid, PageHero, ProcessSteps, SectionHeader } from "@/components/layout";
 import { Reveal } from "@/components/ui";
-import { MissionVision, about, coreValues, homeCta, whyVmed } from "@/features/company";
+import { MissionVision, about, coreValues, whyVmed } from "@/features/company";
 
 export const metadata: Metadata = {
   title: "About",
@@ -99,7 +99,6 @@ export default function AboutPage() {
         </Reveal>
       </section>
 
-      <CtaBanner title={homeCta.title} body={homeCta.body} primary={homeCta.primary} />
     </main>
   );
 }

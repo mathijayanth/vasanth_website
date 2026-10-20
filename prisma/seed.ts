@@ -219,7 +219,7 @@ async function main() {
       authorSlug: "marcus-chen",
       readingTime: 5,
       featuredImage:
-        "https://images.unsplash.com/photo-1541781774459-bb2af2d05a55?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&h=600&fit=crop",
       featuredImageAlt: "Calm bedroom with soft morning light",
       tagSlugs: ["wellness", "patient-education"],
     },
@@ -231,7 +231,7 @@ async function main() {
       authorSlug: "elena-vasquez",
       readingTime: 3,
       featuredImage:
-        "https://images.unsplash.com/photo-1548839140-29a7492991a5?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800&h=600&fit=crop",
       featuredImageAlt: "Glass of water on a table",
       tagSlugs: ["wellness", "evidence"],
     },

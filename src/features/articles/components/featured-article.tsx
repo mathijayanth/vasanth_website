@@ -1,4 +1,4 @@
-import { PageLink as Link } from "@/components/ui/page-link";
+import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui";
 import { ArticleMeta } from "./article-card";

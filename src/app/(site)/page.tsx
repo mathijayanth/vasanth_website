@@ -1,13 +1,11 @@
-import { PageLink as Link } from "@/components/ui/page-link";
-import { CtaBanner, ProcessSteps, SectionHeader } from "@/components/layout";
+import Link from "next/link";
+import { ProcessSteps, SectionHeader } from "@/components/layout";
 import { Reveal } from "@/components/ui";
 import { ArticleGrid } from "@/features/articles";
 import { getLatestArticles } from "@/features/articles/server/article.service";
 import {
   HomeHero,
-  MissionVision,
   audiencesServed,
-  homeCta,
   homeIntro,
   whyVmed,
 } from "@/features/company";
@@ -125,10 +123,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className={`${container} py-16 lg:py-20`}>
-        <MissionVision />
-      </section>
-
       {latestArticles.length > 0 ? (
         <section className="border-t border-border py-16">
           <div className={container}>
@@ -144,8 +138,6 @@ export default async function HomePage() {
           </div>
         </section>
       ) : null}
-
-      <CtaBanner title={homeCta.title} body={homeCta.body} primary={homeCta.primary} />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { PageLink as Link } from "@/components/ui/page-link";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { focusRing, touchTarget } from "@/components/ui/primitives";
 import { primaryNavLinks } from "@/config/site";
@@ -137,7 +137,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-transparent bg-background/80 backdrop-blur-xl">
       <div
         className={cn(
-          "mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 transition-shadow duration-500 sm:px-6 lg:px-8",
+          "mx-auto flex h-24 max-w-6xl items-center gap-3 px-4 transition-shadow duration-500 sm:h-28 sm:px-6 lg:px-8",
           scrolled && "shadow-[0_1px_0_0_var(--border)]",
         )}
       >

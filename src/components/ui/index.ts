@@ -15,7 +15,6 @@ export { EmptyState } from "./empty-state";
 export { ErrorState } from "./error-state";
 export { Input } from "./input";
 export { Modal, ModalCloseButton } from "./modal";
-export { PageLink } from "./page-link";
 export { Pagination, type PaginationLink } from "./pagination";
 export {
   disabledStyles,

@@ -1,4 +1,4 @@
-import { PageLink as Link } from "@/components/ui/page-link";
+import Link from "next/link";
 import { FeatureGrid, ProcessSteps, SectionHeader } from "@/components/layout";
 import { Accordion, Reveal } from "@/components/ui";
 import { serviceHref, serviceSummaries } from "../data/service-summaries";

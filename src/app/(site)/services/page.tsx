@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { PageLink as Link } from "@/components/ui/page-link";
-import { CtaBanner, PageHero, ProcessSteps, SectionHeader } from "@/components/layout";
+import Link from "next/link";
+import { PageHero, ProcessSteps, SectionHeader } from "@/components/layout";
 import { Reveal } from "@/components/ui";
-import { homeCta, servicesIntro } from "@/features/company";
+import { servicesIntro } from "@/features/company";
 import { ServiceCard, ServiceIcon, serviceSummaries, serviceWorkflow } from "@/features/services";
 
 export const metadata: Metadata = {
@@ -86,8 +86,6 @@ export default function ServicesPage() {
         <SectionHeader align="center" overline="Our Service Workflow" title="From Requirement to Final Content" />
         <ProcessSteps className="mt-12" steps={serviceWorkflow} />
       </section>
-
-      <CtaBanner title={homeCta.title} body={homeCta.body} primary={homeCta.primary} />
     </main>
   );
 }
